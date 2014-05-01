@@ -1,0 +1,434 @@
+{
+    "a": {
+        "interface": "HTMLAnchorElement"
+    },
+    "abbr": {
+        "interface": "HTMLElement"
+    },
+    "acronym": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "abbr"
+    },
+    "address": {
+        "interface": "HTMLElement"
+    },
+    "applet": {
+        "interface": "HTMLAppletElement",
+        "obsolete": "true",
+        "alternative": "object"
+    },
+    "area": {
+        "interface": "HTMLAreaElement"
+    },
+    "article": {
+        "interface": "HTMLElement"
+    },
+    "aside": {
+        "interface": "HTMLElement"
+    },
+    "audio": {
+        "interface": "HTMLMediaElement"
+    },
+    "b": {
+        "interface": "HTMLElement"
+    },
+    "base": {
+        "interface": "HTMLBaseElement"
+    },
+    "basefont": {
+        "interface": "HTMLBaseFontElement",
+        "obsolete": "true",
+        "alternative": "CSS"
+    },
+    "bdi": {
+        "interface": "HTMLElement"
+    },
+    "bdo": {
+        "interface": "HTMLElement"
+    },
+    "bgsound": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "CSS"
+    },
+    "big": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "CSS"
+    },
+    "blink": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "CSS"
+    },
+    "blockquote": {
+        "interface": "HTMLElement"
+    },
+    "body": {
+        "interface": "HTMLBodyElement"
+    },
+    "br": {
+        "interface": "HTMLBRElement"
+    },
+    "button": {
+        "interface": "HTMLButtonElement"
+    },
+    "canvas": {
+        "interface": "HTMLCanvasElement"
+    },
+    "caption": {
+        "interface": "HTMLTableCaptionElement"
+    },
+    "center": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "CSS"
+    },
+    "cite": {
+        "interface": "HTMLElement"
+    },
+    "code": {
+        "interface": "HTMLElement"
+    },
+    "col": {
+        "interface": "HTMLTableColElement"
+    },
+    "colgroup": {
+        "interface": "HTMLTableColElement"
+    },
+    "content": {
+        "obsolete": "false"
+    },
+    "data": {
+        "obsolete": "false"
+    },
+    "datalist": {
+        "obsolete": "false"
+    },
+    "dd": {
+        "interface": "HTMLElement"
+    },
+    "decorator": {
+        "obsolete": "false"
+    },
+    "del": {
+        "interface": "HTMLModElement"
+    },
+    "details": {
+        "obsolete": "false"
+    },
+    "dfn": {
+        "interface": "HTMLElement"
+    },
+    "dir": {
+        "obsolete": "true",
+        "alternative": "ul"
+    },
+    "div": {
+        "interface": "HTMLDivElement"
+    },
+    "dl": {
+        "interface": "HTMLDListElement"
+    },
+    "dt": {
+        "interface": "HTMLElement"
+    },
+    "element": {
+        "obsolete": "false"
+    },
+    "em": {
+        "interface": "HTMLElement"
+    },
+    "embed": {
+        "obsolete": "false"
+    },
+    "fieldset": {
+        "interface": "HTMLFieldSetElement"
+    },
+    "figcaption": {
+        "interface": "HTMLElement"
+    },
+    "figure": {
+        "interface": "HTMLElement"
+    },
+    "font": {
+        "interface": "HTMLFontElement",
+        "obosolete": "true",
+        "alternative": "CSS"
+    },
+    "footer": {
+        "interface": "HTMLElement"
+    },
+    "form": {
+        "interface": "HTMLFormElement"
+    },
+    "frame": {
+        "interface": "HTMLFrameElement"
+    },
+    "frameset": {
+        "interface": "HTMLFrameSetElement"
+    },
+    "h1": {
+        "interface": "HTMLHeadingElement"
+    },
+    "h2": {
+        "interface": "HTMLHeadingElement"
+    },
+    "h3": {
+        "interface": "HTMLHeadingElement"
+    },
+    "h4": {
+        "interface": "HTMLHeadingElement"
+    },
+    "h5": {
+        "interface": "HTMLHeadingElement"
+    },
+    "h6": {
+        "interface": "HTMLHeadingElement"
+    },
+    "head": {
+        "interface": "HTMLHeadElement"
+    },
+    "header": {
+        "interface": "HTMLElement"
+    },
+    "hgroup": {
+        "interface": "HTMLElement"
+    },
+    "hr": {
+        "interface": "HTMLHRElement"
+    },
+    "html": {
+        "interface": "HTMLHtmlElement"
+    },
+    "i": {
+        "interface": "HTMLElement"
+    },
+    "iframe": {
+        "interface": "HTMLIFrameElement"
+    },
+    "img": {
+        "interface": "HTMLImageElement"
+    },
+    "input": {
+        "interface": "HTMLInputElement"
+    },
+    "ins": {
+        "interface": "HTMLModElement"
+    },
+    "isindex": {
+        "obsolete": "true"
+    },
+    "kbd": {
+        "interface": "HTMLElement"
+    },
+    "keygen": {
+        "obsolete": "false"
+    },
+    "label": {
+        "interface": "HTMLLabelElement"
+    },
+    "legend": {
+        "interface": "HTMLLegendElement"
+    },
+    "li": {
+        "interface": "HTMLLIElement"
+    },
+    "link": {
+        "interface": "HTMLLinkElement"
+    },
+    "listing": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "pre"
+    },
+    "main": {
+        "interface": "HTMLElement"
+    },
+    "map": {
+        "interface": "HTMLMapElement"
+    },
+    "mark": {
+        "interface": "HTMLElement"
+    },
+    "marquee": {
+        "obsolete": "true"
+    },
+    "menu": {
+        "interface": "HTMLMenuElement"
+    },
+    "menuitem": {
+        "obsolete": "false"
+    },
+    "meta": {
+        "interface": "HTMLMetaElement"
+    },
+    "meter": {
+        "obsolete": "false"
+    },
+    "nav": {
+        "interface": "HTMLElement"
+    },
+    "nobr": {
+        "obsolete": "true"
+    },
+    "noframes": {
+        "obsolete": "true"
+    },
+    "noscript": {
+        "interface": "HTMLElement"
+    },
+    "object": {
+        "interface": "HTMLObjectElement"
+    },
+    "ol": {
+        "interface": "HTMLOListElement"
+    },
+    "optgroup": {
+        "interface": "HTMLOptGroupElement"
+    },
+    "option": {
+        "interface": "HTMLOptionElement"
+    },
+    "output": {
+        "obsolete": "false"
+    },
+    "p": {
+        "interface": "HTMLParagraphElement"
+    },
+    "param": {
+        "interface": "HTMLParamElement"
+    },
+    "plaintext": {
+        "obsolete": "true",
+        "alternative": "pre"
+    },
+    "pre": {
+        "interface": "HTMLPreElement"
+    },
+    "progress": {
+        "obsolete": "false"
+    },
+    "q": {
+        "interface": "HTMLQuoteElement"
+    },
+    "rp": {
+        "interface": "HTMLElement"
+    },
+    "rt": {
+        "interface": "HTMLElement"
+    },
+    "ruby": {
+        "interface": "HTMLElement"
+    },
+    "s": {
+        "interface": "HTMLElement"
+    },
+    "samp": {
+        "interface": "HTMLElement"
+    },
+    "script": {
+        "interface": "HTMLScriptElement"
+    },
+    "section": {
+        "interface": "HTMLElement"
+    },
+    "select": {
+        "interface": "HTMLSelectElement"
+    },
+    "shadow": {
+        "obsolete": "false"
+    },
+    "small": {
+        "interface": "HTMLElement"
+    },
+    "source": {
+        "obsolete": "false"
+    },
+    "spacer": {
+        "obsolete": "true"
+    },
+    "span": {
+        "interface": "HTMLElement"
+    },
+    "strike": {
+        "interface": "HTMLElement"
+    },
+    "strong": {
+        "interface": "HTMLElement"
+    },
+    "style": {
+        "interface": "HTMLStyleElement"
+    },
+    "sub": {
+        "interface": "HTMLElement"
+    },
+    "summary": {
+        "interface": "HTMLElement"
+    },
+    "sup": {
+        "interface": "HTMLElement"
+    },
+    "table": {
+        "interface": "HTMLTableElement"
+    },
+    "tbody": {
+        "interface": "HTMLTableSectionElement"
+    },
+    "td": {
+        "interface": "HTMLTableCellElement"
+    },
+    "template": {
+        "obsolete": "false"
+    },
+    "textarea": {
+        "interface": "HTMLTextAreaElement"
+    },
+    "tfoot": {
+        "interface": "HTMLTableSectionElement"
+    },
+    "th": {
+        "interface": "HTMLTableCellElement"
+    },
+    "thead": {
+        "interface": "HTMLTableSectionElement"
+    },
+    "time": {
+        "interface": "HTMLElement"
+    },
+    "title": {
+        "interface": "HTMLTitleElement"
+    },
+    "tr": {
+        "interface": "HTMLTableRowElement"
+    },
+    "track": {
+        "interface": "HTMLElement"
+    },
+    "tt": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "code, span"
+    },
+    "u": {
+        "interface": "HTMLElement"
+    },
+    "ul": {
+        "interface": "HTMLUListElement"
+    },
+    "var": {
+        "interface": "HTMLElement"
+    },
+    "video": {
+        "interface": "HTMLVideoElement"
+    },
+    "wbr": {
+        "interface": "HTMLElement"
+    },
+    "xmp": {
+        "interface": "HTMLElement",
+        "obsolete": "true",
+        "alternative": "pre, code"
+    }
+}
