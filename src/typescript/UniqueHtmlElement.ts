@@ -4,7 +4,6 @@
 class UniqueHtmlElement {
 
     elementId:string;
-
     elementInterface:string;
 
     constructor(elementId:string, elementInterface:string) {

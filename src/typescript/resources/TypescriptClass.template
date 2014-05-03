@@ -1,0 +1,14 @@
+class @className@ {
+
+    @elements@
+
+    constructor() {
+
+    }
+
+    loadInto(parent:HTMLElement): void {
+
+    }
+}
+
+export = @className@;

@@ -1,12 +1,20 @@
+/// <reference path="../../typings/tsd.d.ts"/>
 /**
  * Created by jcabresos on 4/30/2014.
  */
+import fs = require('fs');
 import UniqueHtmlElement = require('./UniqueHtmlElement');
 import HtmlTagInfo = require('./HtmlTagInfo');
 
 class UniqueHtmlElementExtractor {
 
-    static NODES_WITH_ID:RegExp = /\<[a-z1-6]+\s+[\w\d\"\=\s\,\-\']*(id\=)+(\"|\'){1}[a-z0-9]+/igm;
+    /**
+     * TODO:
+     * Move this RegExp to a class. To make this extractor more dynamic, have the RegExp externalize to a class and
+     * pass an instance of that class to the instance of <code>UniqueHtmlElementExtractor</code>.
+     */
+
+    static NODES_WITH_ID:RegExp = /\<[a-z1-6]+\s+[\w\d\"\=\s\,-\-\']*(id\=)+(\"|\'){1}[a-z0-9]+/igm;
 
     static HTML_TAG:RegExp = /\<[a-z1-6]+/igm;
 
@@ -16,16 +24,10 @@ class UniqueHtmlElementExtractor {
 
     static ID_DECLARATION:RegExp = /((id\=\")|\"|\')+/ig;
 
-    htmlText:string;
-
     htmlRef:{[tagName:string]: HtmlTagInfo};
 
-    output:UniqueHtmlElement[];
-
-    constructor(htmlText:string, htmlRef:{[tagName:string]: HtmlTagInfo}) {
-        this.htmlText = htmlText;
-        this.htmlRef = htmlRef;
-        this.output = [];
+    constructor() {
+        this.htmlRef = JSON.parse(fs.readFileSync(__dirname + "/resources/htmlref.json", "UTF-8"));
     }
 
     getTagFromFragment(fragment:string):string {
@@ -38,10 +40,11 @@ class UniqueHtmlElementExtractor {
         return idFragment.replace(UniqueHtmlElementExtractor.ID_DECLARATION, "");
     }
 
-    extract():UniqueHtmlElement[] {
-        this.output = [];
+    extract(htmlText:string):UniqueHtmlElement[] {
 
-        var matches:string[] = this.htmlText.match(UniqueHtmlElementExtractor.NODES_WITH_ID);
+        var output:UniqueHtmlElement[] = [];
+
+        var matches:string[] = htmlText.match(UniqueHtmlElementExtractor.NODES_WITH_ID);
 
         for(var i:number = 0; i < matches.length; i++) {
 
@@ -54,10 +57,10 @@ class UniqueHtmlElementExtractor {
 
             var uElement:UniqueHtmlElement = new UniqueHtmlElement(idValue, tagInterfaceName);
 
-            this.output.push(uElement);
+            output.push(uElement);
         }
 
-        return this.output;
+        return output;
     }
 }
 

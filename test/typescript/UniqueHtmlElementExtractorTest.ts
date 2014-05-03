@@ -4,20 +4,17 @@
  */
 import assert = require('assert');
 import fs = require('fs');
-import HtmlTagInfo = require('../../src/compiler/HtmlTagInfo');
-import UniqueHtmlElementExtractor = require('../../src/compiler/UniqueHtmlElementExtractor');
-import UniqueHtmlElement = require('../../src/compiler/UniqueHtmlElement');
+import UniqueHtmlElementExtractor = require('../../src/typescript/UniqueHtmlElementExtractor');
+import UniqueHtmlElement = require('../../src/typescript/UniqueHtmlElement');
 
-var htmlRef:{[s:string]: HtmlTagInfo} = JSON.parse(fs.readFileSync("src/htmlref.json", "UTF-8"));
-
-var htmlInput:string =  fs.readFileSync("test/compiler/input/Email.html", "UTF-8");
+var htmlInput:string =  fs.readFileSync("test/typescript/input/Email.html", "UTF-8");
 
 describe("UniqueHtmlElement extraction", () => {
 
     var extractor:UniqueHtmlElementExtractor;
 
     before(() => {
-        extractor = new UniqueHtmlElementExtractor(htmlInput, htmlRef);
+        extractor = new UniqueHtmlElementExtractor();
     });
 
     it("get a tag from a node fragment", () => {
@@ -30,7 +27,7 @@ describe("UniqueHtmlElement extraction", () => {
     })
 
     it("can produce an array of UniqueHtmlElement", () => {
-       var uElements:UniqueHtmlElement[] = extractor.extract();
+       var uElements:UniqueHtmlElement[] = extractor.extract(htmlInput);
        assert.equal(uElements.length, 3);
 
        var subjectElement:UniqueHtmlElement = uElements[0];
