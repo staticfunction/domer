@@ -19,7 +19,8 @@
     "mocha": "~1.18.2",
     "grunt-mocha-istanbul": "~1.4.1",
     "grunt-tsd": "~0.1.0",
-    "grunt-ts": "~1.11.0"
+    "grunt-ts": "~1.11.0",
+    "htmlparser2": "~3.7.1"
   },
   "preferGlobal": "true",
   "bin": {
