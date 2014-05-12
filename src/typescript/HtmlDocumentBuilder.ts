@@ -6,18 +6,15 @@ import htmlparser = require('htmlparser2');
 import HtmlDocument = require('./HtmlDocument');
 import HtmlNodeDeclaration = require('./HtmlNodeDeclaration');
 import HtmlTagInfo = require('./HtmlTagInfo');
+import DomerIdOptions = require('../DomerIdOptions');
 
 class HtmlDocumentBuilder implements htmlparser.Handler {
-
-    static STRIP_IDS:string = "stripIds";
-
-    static RETAIN_IDS:string = "retainIds";
-
-    static RESOLVE_IDS:string = "resolveIds";
 
     parser:htmlparser.Parser;
 
     nodeCount:number = 0;
+
+    htmlDocument:HtmlDocument;
 
     domInstructions:string[];
 
@@ -25,14 +22,57 @@ class HtmlDocumentBuilder implements htmlparser.Handler {
 
     parentChild:{child:string; parent:string}[];
 
-    idStrategy:string = HtmlDocumentBuilder.STRIP_IDS;
+    setAttributes:(elementName:string, attribs:{[s:string]: string}) => void;
 
-    constructor(idStrategy:string) {
-        this.idStrategy = idStrategy;
+    setAttributesDefault = (elementName:string, attribs:{[s:string]: string}) => {
+        for(var key in attribs) {
+            if(key == 'id')
+                continue;
+
+            var setAttribute:string = elementName + ".setAttribute('" + key + "', '" + attribs[key] + "')";
+            this.htmlDocument.createInstructions.push(setAttribute);
+        }
+    }
+
+    setAttributesRetainIds = (elementName:string, attribs:{[s:string]: string}) => {
+        for(var key in attribs) {
+            var setAttribute:string = elementName + ".setAttribute('" + key + "', '" + attribs[key] + "')";
+            this.htmlDocument.createInstructions.push(setAttribute);
+        }
+    }
+
+    setAttributesResolveIds = (elementName:string, attribs:{[s:string]: string}) => {
+        for(var key in attribs) {
+
+            var setAttribute:string;
+
+            if(key == 'id') {
+                setAttribute = elementName + ".setAttribute('" + key + "', '" + attribs[key] + "_' + id)";
+            }
+            else {
+                setAttribute = elementName + ".setAttribute('" + key + "', '" + attribs[key] + "')";
+            }
+
+            this.htmlDocument.createInstructions.push(setAttribute);
+        }
+    }
+
+    constructor(opts?:DomerIdOptions) {
         this.parser = new htmlparser.Parser(this);
-        this.domInstructions = [];
+        this.htmlDocument = new HtmlDocument();
         this.nodeStack = [];
         this.parentChild = [];
+
+        if(opts == DomerIdOptions.RETAIN_IDS) {
+            this.setAttributes = this.setAttributesRetainIds;
+        }
+        else if(opts == DomerIdOptions.RESOLVE_IDS) {
+            this.setAttributes = this.setAttributesResolveIds;
+        }
+        else {
+            this.setAttributes = this.setAttributesDefault;
+        }
+
     }
 
     getCurrentParent():string {
@@ -74,15 +114,8 @@ class HtmlDocumentBuilder implements htmlparser.Handler {
             domInstruction = node.declaration + " = document.createTextNode('" + data + "')";
         }
 
-        this.domInstructions.push(domInstruction);
+        this.htmlDocument.createInstructions.push(domInstruction);
         return node.access;
-    }
-
-    setAttributes(elementName:string, attribs:{[s:string]: string}):void {
-        for(var key in attribs) {
-            var setAttribute:string = elementName + ".setAttribute('" + key + "', '" + attribs[key] + "')";
-            this.domInstructions.push(setAttribute);
-        }
     }
 
     setupRelations():void {
@@ -91,7 +124,7 @@ class HtmlDocumentBuilder implements htmlparser.Handler {
             var rel:{child:string; parent:string} = this.parentChild[rels - 1];
 
             var domInstruction:string = rel.parent + ".appendChild(" + rel.child + ")";
-            this.domInstructions.push(domInstruction);
+            this.htmlDocument.createInstructions.push(domInstruction);
             rels--;
         }
     }
@@ -120,8 +153,10 @@ class HtmlDocumentBuilder implements htmlparser.Handler {
 
     onreset():void {
         this.nodeCount = 0;
-        this.domInstructions = [];
+        this.htmlDocument.createInstructions = [];
         this.nodeStack = [];
+        this.htmlDocument = new HtmlDocument();
+        this.parentChild
     }
 
     onend():void {
@@ -130,7 +165,7 @@ class HtmlDocumentBuilder implements htmlparser.Handler {
 
     build(htmlText:string):void {
         this.parser.parseComplete(htmlText);
-        console.info(this.domInstructions.join(';\n'));
+        console.info(this.htmlDocument.createInstructions.join(';\n'));
     }
 
 }

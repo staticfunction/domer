@@ -5,7 +5,15 @@ import UniqueHtmlElement = require('./UniqueHtmlElement');
 
 class HtmlDocument {
 
-    domInstructions:string[];
-
+    createInstructions:string[];
+    displayInstructions:string[];
     uniqueElements:UniqueHtmlElement[];
+
+    constructor() {
+        this.createInstructions = [];
+        this.displayInstructions = [];
+        this.uniqueElements = [];
+    }
 }
+
+ export = HtmlDocument;

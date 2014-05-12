@@ -3,6 +3,7 @@
  * Created by jcabresos on 5/5/2014.
  */
 import DomInstructionsBuilder = require("../../src/typescript/HtmlDocumentBuilder");
+import DomerIdOptions = require('../../src/DomerIdOptions');
 /// <reference path="../../typings/tsd.d.ts"/>
 /**
  * Created by jcabresos on 5/1/2014.
@@ -12,7 +13,7 @@ import fs = require('fs');
 
 var htmlInput:string =  fs.readFileSync("test/typescript/input/Chat.html", "UTF-8");
 
-var domOutput:string =
+var domResolveIdOutput:string =
     "var n1:HTMLDivElement = document.createElement('div');" +
     "var n2:HTMLLabelElement = document.createElement('label');" +
     "n2.setAttribute('id', 'subject_' + id);" +
@@ -43,7 +44,7 @@ describe("Document Builder", () => {
     var domBuilder: DomInstructionsBuilder;
 
     before(() => {
-        domBuilder = new DomInstructionsBuilder();
+        domBuilder = new DomInstructionsBuilder(DomerIdOptions.RESOLVE_IDS);
     });
 
     it("parses the html text", () => {
