@@ -11,7 +11,7 @@ import UniqueHtmlElementExtractor = require('../../src/typescript/UniqueHtmlElem
 import UniqueHtmlElementClassBuilder = require('../../src/typescript/UniqueHtmlElementClassBuilder');
 import UniqueHtmlElement = require('../../src/typescript/UniqueHtmlElement');
 
-describe("UniqueHtmlClassBuilder creates a Class", () => {
+describe("UniqueHtmlClassBuilder creates a Class.domerx", () => {
 
     var classBuilder:UniqueHtmlElementClassBuilder;
     var extractor:UniqueHtmlElementExtractor;

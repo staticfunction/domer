@@ -19,14 +19,15 @@
     "mocha": "~1.18.2",
     "grunt-mocha-istanbul": "~1.4.1",
     "grunt-tsd": "~0.1.0",
-    "grunt-ts": "~1.11.0",
-    "htmlparser2": "~3.7.1"
+    "grunt-ts": "~1.11.0"
   },
   "preferGlobal": "true",
   "bin": {
     "domer": "./index.js"
   },
   "dependencies": {
-    "graceful-fs": "~2.0.3"
+    "graceful-fs": "~2.0.3",
+    "htmlparser2": "~3.7.1",
+    "xmlreader": "~0.2.3"
   }
 }
