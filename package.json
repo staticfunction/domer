@@ -28,6 +28,7 @@
   "dependencies": {
     "graceful-fs": "~2.0.3",
     "htmlparser2": "~3.7.1",
+    "libxmljs": "^0.9.0",
     "xmlreader": "~0.2.3"
   }
 }
