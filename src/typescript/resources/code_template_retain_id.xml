@@ -1,5 +1,5 @@
 <template>
-    <classFactory>
+    <newDomClass>
         <![CDATA[
             class className# {
 
@@ -16,7 +16,12 @@
 
             export = className#;
         ]]>
-    </classFactory>
+    </newDomClass>
+    <uniqueElement>
+        <![CDATA[
+           elementId#: elementType#;
+        ]]>
+    </uniqueElement>
     <createElementLocal>
         <![CDATA[
             var instanceName# = document.createElement('type#');

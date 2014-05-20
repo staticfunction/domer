@@ -1,23 +1,4 @@
 <template>
-    <newDomClass>
-        <![CDATA[
-            class className# {
-
-                elements#
-
-                constructor() {
-                    resolvedId = document._resolvedId_ = document._resolvedId_++ || 0;
-                    creation#
-                }
-
-                appendTo(parent:HTMLElement): void {
-                    display#
-                }
-            }
-
-            export = className#;
-        ]]>
-    </newDomClass>
     <uniqueElement>
         <![CDATA[
            elementId#: elementType#;

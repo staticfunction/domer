@@ -1,6 +1,10 @@
+/// <reference path="../../typings/tsd.d.ts"/>
+
 /**
  * Created by jcabresos on 5/18/2014.
  */
+import libxmljs = require('libxmljs');
+
 export class SetAttributeId {
     accessName:string;
     id:string;
@@ -53,20 +57,48 @@ export class CreateText {
     }
 }
 
-export class ClassFactory {
+export class DomClass {
     className:string;
     elements:string;
     creation:string;
     display:string;
 }
 
-export interface DomInstructionTemplateResource {
+export class Resource {
+
+    newDomClass:string;
     appendChild:string;
     createElementLocal:string;
     createElementMember:string;
+    uniqueElement:string;
     createText:string;
     setAttributeOther:string;
-    setAttributeId?:string;
+    setAttributeId:string;
+
+    constructor(templateResource:string) {
+        var template:libxmljs.XMLDocument = libxmljs.parseXmlString(templateResource);
+
+        var getTemplateChildText = (childName:string, template:libxmljs.XMLDocument, required?:boolean) => {
+            var child:libxmljs.Element = template.get(childName);
+
+            if(!child) {
+                if(required)
+                    throw new Error("required code template \"" + childName + "\" not found.");
+
+                return null;
+            }
+
+            return child.text();
+        }
+        this.newDomClass = getTemplateChildText("newDomClass", template, true);
+        this.appendChild =  getTemplateChildText("appendChild", template, true);
+        this.createElementLocal = getTemplateChildText("createElementLocal", template, true);
+        this.createElementMember = getTemplateChildText("createElementMember", template, true);
+        this.uniqueElement = getTemplateChildText("uniqueElement", template, true);
+        this.createText = getTemplateChildText("createText", template, true);
+        this.setAttributeOther = getTemplateChildText("setAttributeOther", template, true);
+        this.setAttributeId = getTemplateChildText("setAttributeId", template);
+    }
 }
 
 export class DomInstructionTemplates {
@@ -77,12 +109,24 @@ export class DomInstructionTemplates {
     setAttributeOther:Template<SetAttributeOther>;
     setAttributeId:Template<SetAttributeId>;
 
-    constructor(resource:DomInstructionTemplateResource) {
+    constructor(resource:Resource) {
         this.appendChild = new Template<AppendChild>(resource.appendChild);
         this.createElementLocal = new Template<CreateElement>(resource.createElementLocal);
+        this.createText = new Template<CreateText>(resource.createText);
         this.createElementMember = new Template<CreateElement>(resource.createElementMember);
         this.setAttributeOther = new Template<SetAttributeOther>(resource.setAttributeOther);
         this.setAttributeId = resource.setAttributeId ? new Template<SetAttributeId>(resource.setAttributeId) : null;
+
+        this.setAttributeId.create();
+    }
+}
+
+export class DomClassTemplate {
+
+    newDomClass:Template<DomClass>;
+
+    constructor(resource:Resource) {
+        this.newDomClass = new Template<DomClass>(resource.newDomClass);
     }
 }
 
@@ -91,10 +135,16 @@ export class Template<T> {
     static PLACE_HOLDER:RegExp = /\w+(?=#)/g;
     private source:string;
     private sourceKeys:string[];
+    private generator:{new():T};
 
     constructor(src:string) {
         this.source = src;
         this.sourceKeys = src.match(Template.PLACE_HOLDER);
+    }
+
+
+    create():T {
+        return new this.generator();
     }
 
     out(params:T):string {
