@@ -3,8 +3,6 @@
 /**
  * Created by jcabresos on 5/18/2014.
  */
-import libxmljs = require('libxmljs');
-
 export class SetAttributeId {
     accessName:string;
     id:string;
@@ -76,10 +74,10 @@ export class Resource {
     setAttributeId:string;
 
     constructor(templateResource:string) {
-        var template:libxmljs.XMLDocument = libxmljs.parseXmlString(templateResource);
+        var template:{[key:string]:any} = JSON.parse(templateResource);
 
-        var getTemplateChildText = (childName:string, template:libxmljs.XMLDocument, required?:boolean) => {
-            var child:libxmljs.Element = template.get(childName);
+        var getTemplateChildText = (childName:string, template:{[key:string]:any}, required?:boolean) => {
+            var child:any = template[childName];
 
             if(!child) {
                 if(required)
@@ -88,8 +86,13 @@ export class Resource {
                 return null;
             }
 
-            return child.text();
+            if(Array.isArray(child)) {
+                return child.join("\n");
+            }
+            else
+                return child;
         }
+
         this.newDomClass = getTemplateChildText("newDomClass", template, true);
         this.appendChild =  getTemplateChildText("appendChild", template, true);
         this.createElementLocal = getTemplateChildText("createElementLocal", template, true);

@@ -6,22 +6,22 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "commander/commander.d.ts": {
-      "commit": "9371c65e5a288612195b4dac93dd9b57dc41911a"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     },
     "graceful-fs/graceful-fs.d.ts": {
-      "commit": "9371c65e5a288612195b4dac93dd9b57dc41911a"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     },
     "mocha/mocha.d.ts": {
-      "commit": "9371c65e5a288612195b4dac93dd9b57dc41911a"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     },
     "node/node.d.ts": {
-      "commit": "9371c65e5a288612195b4dac93dd9b57dc41911a"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     },
     "assert/assert.d.ts": {
-      "commit": "9371c65e5a288612195b4dac93dd9b57dc41911a"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     },
     "libxmljs/libxmljs.d.ts": {
-      "commit": "fbee02cb171c2676ea8a391f7ad874a63d0216b0"
+      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
     }
   }
 }

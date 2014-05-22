@@ -1,0 +1,21 @@
+{
+    "newDomClass": [
+        "class className# {\n",
+        "    elements#\n",
+        "    constructor() {",
+        "        resolvedId = document._resolvedId_ = document._resolvedId_++ || 0;",
+        "        creation#",
+        "    }\n",
+        "    appendTo(parent:HTMLElement): void {",
+        "        display#",
+        "    }",
+        "}\n",
+        "export = className#;"
+    ],
+    "uniqueElement": "elementId#: elementType#;",
+    "createElementLocal": "var instanceName# = document.createElement('type#');",
+    "createElementMember": "this.instanceName# = document.createElement('type#');",
+    "createText": "var instanceName# = document.createTextNode('text#');",
+    "setAttributeId": "accessName#.setAttribute('id', 'id#_' + resolvedId);",
+    "appendChild": "parent#.appendChild(child#);"
+}
