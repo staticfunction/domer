@@ -46,11 +46,11 @@ export class CreateElement {
 }
 
 export class CreateText {
-    accessName:string;
+    instanceName:string;
     text:string;
 
-    constructor(accessName:string, text:string) {
-        this.accessName = accessName;
+    constructor(instanceName:string, text:string) {
+        this.instanceName = instanceName;
         this.text = text;
     }
 }
@@ -119,8 +119,6 @@ export class DomInstructionTemplates {
         this.createElementMember = new Template<CreateElement>(resource.createElementMember);
         this.setAttributeOther = new Template<SetAttributeOther>(resource.setAttributeOther);
         this.setAttributeId = resource.setAttributeId ? new Template<SetAttributeId>(resource.setAttributeId) : null;
-
-        this.setAttributeId.create();
     }
 }
 
@@ -138,16 +136,10 @@ export class Template<T> {
     static PLACE_HOLDER:RegExp = /\w+(?=#)/g;
     private source:string;
     private sourceKeys:string[];
-    private generator:{new():T};
 
     constructor(src:string) {
         this.source = src;
         this.sourceKeys = src.match(Template.PLACE_HOLDER);
-    }
-
-
-    create():T {
-        return new this.generator();
     }
 
     out(params:T):string {
@@ -159,7 +151,8 @@ export class Template<T> {
             if(!params.hasOwnProperty(key))
                 throw new Error("Required parameter \"" + key + "\" not found.");
 
-            tmp = this.source.replace(key + "#", params[key]);
+           var regex:RegExp = new RegExp(key + "#", "gm")
+            tmp = tmp.replace(regex, params[key]);
         }
 
         return tmp;

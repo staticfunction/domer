@@ -6,22 +6,19 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "commander/commander.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
+      "commit": "568cb0076143b993d995f21e2577fda92e98f7d0"
     },
     "graceful-fs/graceful-fs.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
+      "commit": "568cb0076143b993d995f21e2577fda92e98f7d0"
     },
     "mocha/mocha.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
+      "commit": "568cb0076143b993d995f21e2577fda92e98f7d0"
     },
     "node/node.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
+      "commit": "568cb0076143b993d995f21e2577fda92e98f7d0"
     },
     "assert/assert.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
-    },
-    "libxmljs/libxmljs.d.ts": {
-      "commit": "14cc5e58a6019275f69bfc69073c5a91ea709b16"
+      "commit": "568cb0076143b993d995f21e2577fda92e98f7d0"
     }
   }
 }

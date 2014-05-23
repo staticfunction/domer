@@ -78,3 +78,36 @@ describe("Resource template extraction", () => {
        }, "should not throw an error as setAttributeId is not required");
    });
 });
+
+describe("DomInstruction Templates", () => {
+
+    var domTemplates:templates.DomInstructionTemplates = new templates.DomInstructionTemplates(new templates.Resource(template_resolve_id));
+
+    it("produces new content out based on the template", () => {
+        var appendChild:templates.AppendChild = new templates.AppendChild("this.root", "this.mainView");
+        var appendChildOutput:string = "this.root.appendChild(this.mainView);";
+        assert.equal(domTemplates.appendChild.out(appendChild), appendChildOutput);
+
+        var createElemLocal:templates.CreateElement = new templates.CreateElement("n0", "div");
+        var createElemLocalOutput:string = "var n0 = document.createElement('div');";
+        assert.equal(domTemplates.createElementLocal.out(createElemLocal), createElemLocalOutput);
+
+        var createElemMember:templates.CreateElement = new templates.CreateElement("container", "div");
+        var createElemMemberOutput:string = "this.container = document.createElement('div');";
+        assert.equal(domTemplates.createElementMember.out(createElemMember), createElemMemberOutput);
+
+        var createText:templates.CreateText = new templates.CreateText("n2", "some text.");
+        var createTextOutput:string = "var n2 = document.createTextNode('some text.');";
+        assert.equal(domTemplates.createText.out(createText), createTextOutput);
+
+        var setAttributeId:templates.SetAttributeId = new templates.SetAttributeId("this.mainView", "mainView");
+        var setAttributeIdOutput:string = "this.mainView.setAttribute('id', 'mainView_' + resolvedId);";
+        assert.equal(domTemplates.setAttributeId.out(setAttributeId), setAttributeIdOutput);
+
+        var setAttributeOther:templates.SetAttributeOther = new templates.SetAttributeOther("this.mainView", "class", "container");
+        var setAttributeOtherOutput:string = "this.mainView.setAttribute('class', 'container');";
+        assert.equal(domTemplates.setAttributeOther.out(setAttributeOther), setAttributeOtherOutput);
+    })
+
+
+});
