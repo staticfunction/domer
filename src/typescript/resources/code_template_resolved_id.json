@@ -1,13 +1,15 @@
 {
     "newDomClass": [
         "class className# {\n",
+        "    root: DocumentFragment;",
         "    elements#\n",
         "    constructor() {",
-        "        resolvedId = document._resolvedId_ = document._resolvedId_++ || 0;",
+        "        domerId = document._domerId_ = document._domerId_++ || 0;",
+        "        this.root = document.createDocumentFragment();",
         "        creation#",
         "    }\n",
         "    appendTo(parent:HTMLElement): void {",
-        "        display#",
+        "        parent.appendChild(this.root);",
         "    }",
         "}\n",
         "export = className#;"
@@ -17,6 +19,6 @@
     "createElementMember": "this.instanceName# = document.createElement('type#');",
     "createText": "var instanceName# = document.createTextNode('text#');",
     "setAttributeOther": "accessName#.setAttribute('key#', 'value#');",
-    "setAttributeId": "accessName#.setAttribute('id', 'id#_' + resolvedId);",
+    "setAttributeId": "accessName#.setAttribute('id', 'id#_' + domerId);",
     "appendChild": "parent#.appendChild(child#);"
 }

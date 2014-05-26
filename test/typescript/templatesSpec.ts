@@ -6,7 +6,7 @@ import templates = require('../../src/typescript/templates');
 import fs = require('fs');
 import assert = require('assert');
 
-var template_resolve_id:string = fs.readFileSync( __dirname + "/resources/code_template_resolved_id.json", "UTF-8");
+var template_resolve_id:string = fs.readFileSync("src/typescript/resources/code_template_resolved_id.json", "UTF-8");
 var template_no_dom_class:string = fs.readFileSync(__dirname + "/resources/no_dom_class.json", "UTF-8");
 var template_no_unique_elem:string = fs.readFileSync(__dirname + "/resources/no_unique_element.json", "UTF-8");
 var template_no_create_elem_local:string = fs.readFileSync(__dirname + "/resources/no_create_elem_local.json", "UTF-8");
@@ -18,13 +18,15 @@ var template_no_append_child:string = fs.readFileSync(__dirname + "/resources/no
 
 var domClass:string = [
     "class className# {\n",
+    "    root: DocumentFragment;",
     "    elements#\n",
     "    constructor() {",
-    "        resolvedId = document._resolvedId_ = document._resolvedId_++ || 0;",
+    "        domerId = document._domerId_ = document._domerId_++ || 0;",
+    "        this.root = document.createDocumentFragment();",
     "        creation#",
     "    }\n",
     "    appendTo(parent:HTMLElement): void {",
-    "        display#",
+    "        parent.appendChild(this.root);",
     "    }",
     "}\n",
     "export = className#;"
@@ -35,7 +37,7 @@ var createElementLocal:string = "var instanceName# = document.createElement('typ
 var createElementMember:string = "this.instanceName# = document.createElement('type#');";
 var createText:string = "var instanceName# = document.createTextNode('text#');";
 var setAttributeOther:string = "accessName#.setAttribute('key#', 'value#');";
-var setAttributeId:string = "accessName#.setAttribute('id', 'id#_' + resolvedId);";
+var setAttributeId:string = "accessName#.setAttribute('id', 'id#_' + domerId);";
 var appendChild:string = "parent#.appendChild(child#);";
 
 describe("Resource template extraction", () => {
@@ -79,35 +81,18 @@ describe("Resource template extraction", () => {
    });
 });
 
-describe("DomInstruction Templates", () => {
+describe("Generic template test", () => {
 
-    var domTemplates:templates.DomInstructionTemplates = new templates.DomInstructionTemplates(new templates.Resource(template_resolve_id));
+    var someTemplatePattern:string[] = ["the quick brown foo#\n", "jumped over the lazy bar#."];
 
-    it("produces new content out based on the template", () => {
-        var appendChild:templates.AppendChild = new templates.AppendChild("this.root", "this.mainView");
-        var appendChildOutput:string = "this.root.appendChild(this.mainView);";
-        assert.equal(domTemplates.appendChild.out(appendChild), appendChildOutput);
+    var someTemplate:templates.Template<{foo:string; bar:string}> = new templates.Template<{foo:string; bar:string}>(someTemplatePattern.join(''));
 
-        var createElemLocal:templates.CreateElement = new templates.CreateElement("n0", "div");
-        var createElemLocalOutput:string = "var n0 = document.createElement('div');";
-        assert.equal(domTemplates.createElementLocal.out(createElemLocal), createElemLocalOutput);
+    it("produces new content based on the template", () => {
+        var someParam = {foo:"fox",bar:"dog"};
+        assert.equal(someTemplate.out(someParam), "the quick brown fox\njumped over the lazy dog.");
+    });
 
-        var createElemMember:templates.CreateElement = new templates.CreateElement("container", "div");
-        var createElemMemberOutput:string = "this.container = document.createElement('div');";
-        assert.equal(domTemplates.createElementMember.out(createElemMember), createElemMemberOutput);
-
-        var createText:templates.CreateText = new templates.CreateText("n2", "some text.");
-        var createTextOutput:string = "var n2 = document.createTextNode('some text.');";
-        assert.equal(domTemplates.createText.out(createText), createTextOutput);
-
-        var setAttributeId:templates.SetAttributeId = new templates.SetAttributeId("this.mainView", "mainView");
-        var setAttributeIdOutput:string = "this.mainView.setAttribute('id', 'mainView_' + resolvedId);";
-        assert.equal(domTemplates.setAttributeId.out(setAttributeId), setAttributeIdOutput);
-
-        var setAttributeOther:templates.SetAttributeOther = new templates.SetAttributeOther("this.mainView", "class", "container");
-        var setAttributeOtherOutput:string = "this.mainView.setAttribute('class', 'container');";
-        assert.equal(domTemplates.setAttributeOther.out(setAttributeOther), setAttributeOtherOutput);
-    })
-
-
+    it("throws an error when a required param is not found", () => {
+        assert.throws(() => {someTemplate.out({foo:null,bar:"dog"})});
+    });
 });

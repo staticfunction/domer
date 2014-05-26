@@ -47,7 +47,6 @@ class UniqueHtmlElementFactory {
 export class DomInstructions {
 
     createInstructions:string[];
-    displayInstructions:string[];
     uniqueElements:UniqueHtmlElement[];
     domTemplates:templates.DomInstructionTemplates;
     elementsStack:string[];
@@ -55,7 +54,6 @@ export class DomInstructions {
 
     constructor(template:templates.DomInstructionTemplates) {
         this.createInstructions = [];
-        this.displayInstructions = [];
         this.uniqueElements = [];
         this.elementsStack = [];
         this.elementsLength = 0;
@@ -165,7 +163,6 @@ export class DomClassBuilder implements htmlparser.Handler {
         var domClass:templates.DomClass = new templates.DomClass();
         domClass.className = className;
         domClass.creation = this.currentDomInstructions.createInstructions.join("\n");
-        domClass.display = this.currentDomInstructions.displayInstructions.join("\n");
         domClass.elements = this.currentDomInstructions.uniqueElements.join("\n");
 
         callback(null, this.domClassTemplate.newDomClass.out(domClass));

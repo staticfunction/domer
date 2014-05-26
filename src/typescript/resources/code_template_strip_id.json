@@ -1,12 +1,14 @@
 {
     "newDomClass": [
         "class className# {\n",
+        "    root: DocumentFragment;",
         "    elements#\n",
         "    constructor() {",
+        "        this.root = document.createDocumentFragment();",
         "        creation#",
         "    }\n",
         "    appendTo(parent:HTMLElement): void {",
-        "        display#",
+        "        parent.appendChild(this.root);",
         "    }",
         "}\n",
         "export = className#;"

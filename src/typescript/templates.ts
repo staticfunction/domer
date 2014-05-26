@@ -148,7 +148,7 @@ export class Template<T> {
         for(var i = 0; i < this.sourceKeys.length; i++) {
             var key:string = this.sourceKeys[i];
 
-            if(!params.hasOwnProperty(key))
+            if(params[key] == undefined || params[key] == null)
                 throw new Error("Required parameter \"" + key + "\" not found.");
 
            var regex:RegExp = new RegExp(key + "#", "gm")
