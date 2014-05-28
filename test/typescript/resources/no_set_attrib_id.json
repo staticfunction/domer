@@ -12,7 +12,9 @@
         "}\n",
         "export = className#;"
     ],
-    "uniqueElement": "elementId#: elementType#;",
+    "uniqueElement": "instanceName#: elementType#;",
+    "accessNameLocal": "instanceName#",
+    "accessNameMember": "this.instanceName#",
     "createElementLocal": "var instanceName# = document.createElement('type#');",
     "createElementMember": "this.instanceName# = document.createElement('type#');",
     "createText": "var instanceName# = document.createTextNode('text#');",

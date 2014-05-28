@@ -16,41 +16,20 @@ var template_no_set_attrib_other:string = fs.readFileSync(__dirname + "/resource
 var template_no_set_attrib_id:string = fs.readFileSync(__dirname + "/resources/no_set_attrib_id.json", "UTF-8");
 var template_no_append_child:string = fs.readFileSync(__dirname + "/resources/no_append_child.json", "UTF-8");
 
-var domClass:string = [
-    "class className# {\n",
-    "    root: DocumentFragment;",
-    "    elements#\n",
-    "    constructor() {",
-    "        domerId = document._domerId_ = document._domerId_++ || 0;",
-    "        this.root = document.createDocumentFragment();",
-    "        creation#",
-    "    }\n",
-    "    appendTo(parent:HTMLElement): void {",
-    "        parent.appendChild(this.root);",
-    "    }",
-    "}\n",
-    "export = className#;"
-].join('\n');
-
-var uniqueElement:string = "elementId#: elementType#;";
-var createElementLocal:string = "var instanceName# = document.createElement('type#');";
-var createElementMember:string = "this.instanceName# = document.createElement('type#');";
-var createText:string = "var instanceName# = document.createTextNode('text#');";
-var setAttributeOther:string = "accessName#.setAttribute('key#', 'value#');";
-var setAttributeId:string = "accessName#.setAttribute('id', 'id#_' + domerId);";
-var appendChild:string = "parent#.appendChild(child#);";
+var template_resolve_id_json:{[s:string]:any} = JSON.parse(template_resolve_id);
 
 describe("Resource template extraction", () => {
    it("extracts templates", () => {
         var resource = new templates.Resource(template_resolve_id);
-        assert.equal(resource.newDomClass, domClass);
-        assert.equal(resource.uniqueElement, uniqueElement);
-        assert.equal(resource.createElementLocal, createElementLocal);
-        assert.equal(resource.createElementMember, createElementMember);
-        assert.equal(resource.createText, createText);
-        assert.equal(resource.setAttributeOther, setAttributeOther);
-        assert.equal(resource.setAttributeId, setAttributeId);
-        assert.equal(resource.appendChild, appendChild);
+
+        assert.equal(resource.newDomClass, template_resolve_id_json["newDomClass"].join("\n"));
+        assert.equal(resource.uniqueElement, template_resolve_id_json["uniqueElement"]);
+        assert.equal(resource.createElementLocal, template_resolve_id_json["createElementLocal"]);
+        assert.equal(resource.createElementMember, template_resolve_id_json["createElementMember"]);
+        assert.equal(resource.createText, template_resolve_id_json["createText"]);
+        assert.equal(resource.setAttributeOther, template_resolve_id_json["setAttributeOther"]);
+        assert.equal(resource.setAttributeId, template_resolve_id_json["setAttributeId"]);
+        assert.equal(resource.appendChild, template_resolve_id_json["appendChild"]);
    });
 
    it("throws an error when required properties are not found", () => {

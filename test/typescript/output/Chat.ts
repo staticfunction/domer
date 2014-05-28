@@ -1,4 +1,4 @@
-class Email {
+class Chat {
 
     root: DocumentFragment;
     subject: HTMLLabelElement;
@@ -19,21 +19,21 @@ class Email {
         var n7 = document.createTextNode('bold word.');
         var n8 = document.createElement('div');
         this.displayName = document.createElement('label');
-        n8.appendChild(this.displayName);
-        n6.appendChild(n7);
-        n4.appendChild(n5);
-        n4.appendChild(n6);
+        this.root.appendChild(n0);
         n0.appendChild(this.subject);
         n0.appendChild(this.message);
         n0.appendChild(this.dataHolder);
         n0.appendChild(n4);
+        n4.appendChild(n5);
+        n4.appendChild(n6);
+        n6.appendChild(n7);
         n0.appendChild(n8);
-        this.root.appendChild(n0);
+        n8.appendChild(this.displayName);
     }
 
-    loadInto(parent:HTMLElement): void {
+    appendTo(parent:HTMLElement): void {
         parent.appendChild(this.root);
     }
 }
 
-export = Email;
+export = Chat;

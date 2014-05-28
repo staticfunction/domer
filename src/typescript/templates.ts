@@ -3,6 +3,23 @@
 /**
  * Created by jcabresos on 5/18/2014.
  */
+export class AccessName {
+    instanceName:string;
+    constructor(instanceName:string) {
+        this.instanceName = instanceName;
+    }
+}
+
+export class UniqueElement {
+    instanceName:string;
+    elementType:string;
+
+    constructor(instanceName:string, elementType:string) {
+        this.instanceName = instanceName;
+        this.elementType = elementType;
+    }
+}
+
 export class SetAttributeId {
     accessName:string;
     id:string;
@@ -59,13 +76,15 @@ export class DomClass {
     className:string;
     elements:string;
     creation:string;
-    display:string;
+    stacking:string;
 }
 
 export class Resource {
 
     newDomClass:string;
     appendChild:string;
+    accessNameLocal:string;
+    accessNameMember:string;
     createElementLocal:string;
     createElementMember:string;
     uniqueElement:string;
@@ -95,6 +114,8 @@ export class Resource {
 
         this.newDomClass = getTemplateChildText("newDomClass", template, true);
         this.appendChild =  getTemplateChildText("appendChild", template, true);
+        this.accessNameLocal =  getTemplateChildText("accessNameLocal", template, true);
+        this.accessNameMember =  getTemplateChildText("accessNameMember", template, true);
         this.createElementLocal = getTemplateChildText("createElementLocal", template, true);
         this.createElementMember = getTemplateChildText("createElementMember", template, true);
         this.uniqueElement = getTemplateChildText("uniqueElement", template, true);
@@ -106,15 +127,21 @@ export class Resource {
 
 export class DomInstructionTemplates {
     appendChild:Template<AppendChild>;
+    accessNameLocal:Template<AccessName>;
+    accessNameMember:Template<AccessName>;
     createElementLocal:Template<CreateElement>;
     createElementMember:Template<CreateElement>;
+    uniqueElement:Template<UniqueElement>;
     createText:Template<CreateText>;
     setAttributeOther:Template<SetAttributeOther>;
     setAttributeId:Template<SetAttributeId>;
 
     constructor(resource:Resource) {
         this.appendChild = new Template<AppendChild>(resource.appendChild);
+        this.accessNameLocal = new Template<AccessName>(resource.accessNameLocal);
+        this.accessNameMember = new Template<AccessName>(resource.accessNameMember);
         this.createElementLocal = new Template<CreateElement>(resource.createElementLocal);
+        this.uniqueElement = new Template<UniqueElement>(resource.uniqueElement);
         this.createText = new Template<CreateText>(resource.createText);
         this.createElementMember = new Template<CreateElement>(resource.createElementMember);
         this.setAttributeOther = new Template<SetAttributeOther>(resource.setAttributeOther);

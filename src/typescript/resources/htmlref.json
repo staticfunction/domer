@@ -430,5 +430,8 @@
         "interface": "HTMLElement",
         "obsolete": "true",
         "alternative": "pre, code"
+    },
+    "_unknown_element_": {
+        "interface": "any"
     }
 }

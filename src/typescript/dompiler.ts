@@ -14,76 +14,102 @@ export interface HtmlTagInfo {
     alternative: string;
 }
 
-export class UniqueHtmlElement {
+export class HtmlReference {
 
-    elementId:string;
-    elementInterface:string;
-
-    constructor(elementId:string, elementInterface:string) {
-        this.elementId = elementId;
-        this.elementInterface = elementInterface;
-    }
-}
-
-class UniqueHtmlElementFactory {
+    static UNKNOWN_ELEMENT:string = "_unknown_element_";
 
     htmlRef:{[type:string]:HtmlTagInfo};
 
-    constructor() {
-        this.htmlRef = JSON.parse(fs.readFileSync(__dirname + "/resources/htmlref.json", "UTF-8")); //TODO: externalize the loading.
+    constructor(htmlRefResource:string) {
+        this.htmlRef = JSON.parse(htmlRefResource);
     }
 
-    newInstance(elementId:string, elementType:string):UniqueHtmlElement {
-        var elementInfo:HtmlTagInfo = this.htmlRef[elementType];
+    getHtmlTagInfo(tagName:string):HtmlTagInfo {
+        return this.htmlRef[tagName];
+    }
 
-        if(!elementInfo)
-            throw new Error("Unrecognized elementType: " + elementType);
+    getHtmlTagInterface(tagName:string):string {
+        var tagInfo:HtmlTagInfo = this.getHtmlTagInfo(tagName);
 
-        return new UniqueHtmlElement(elementId, elementInfo.interface);
+        if(!tagInfo || !tagInfo.interface)
+            tagInfo = this.getHtmlTagInfo(HtmlReference.UNKNOWN_ELEMENT);
+
+        return tagInfo.interface;
     }
 }
 
-
 export class DomInstructions {
 
-    createInstructions:string[];
-    uniqueElements:UniqueHtmlElement[];
-    domTemplates:templates.DomInstructionTemplates;
-    elementsStack:string[];
-    elementsLength:number;
+    static ROOT_ELEMENT:string = "root";
+    static ELEMENT_PREFIX:string = "n";
 
-    constructor(template:templates.DomInstructionTemplates) {
+    createInstructions:string[];
+    stackInstructions:string[];s
+    uniqueElements:string[];
+
+    private domTemplates:templates.DomInstructionTemplates;
+    private htmlRef:HtmlReference;
+    private elementsStack:string[];
+    private elementsLength:number;
+    private rootAccessName:string;
+
+    constructor(template:templates.DomInstructionTemplates, htmlRef:HtmlReference) {
+        this.domTemplates = template;
+        this.htmlRef = htmlRef;
         this.createInstructions = [];
+        this.stackInstructions = [];
         this.uniqueElements = [];
         this.elementsStack = [];
         this.elementsLength = 0;
-        this.domTemplates = template;
+        this.rootAccessName = this.domTemplates.accessNameMember.out(new templates.AccessName(DomInstructions.ROOT_ELEMENT));
     }
 
     generateAccessName():string {
-        return "n" + this.elementsLength.toString();
+        return  DomInstructions.ELEMENT_PREFIX + this.elementsLength.toString();
     }
 
     beginElement(type:string, attribs:{[key:string]:string}):void {
         var createElement:templates.CreateElement;
-        var accessName:string = attribs['id'];
+        var instanceName:string = attribs['id'];
+        var accessName:string;
         var instr:string;
 
-        if(accessName) {
-            createElement = new templates.CreateElement(accessName, type);
+        if(instanceName) {
+            createElement = new templates.CreateElement(instanceName, type);
             instr = this.domTemplates.createElementMember.out(createElement);
+            accessName =this.domTemplates.accessNameMember.out(new templates.AccessName(instanceName));
+
+            var uElem:templates.UniqueElement = new templates.UniqueElement(instanceName, this.htmlRef.getHtmlTagInterface(type));
+            this.uniqueElements.push(this.domTemplates.uniqueElement.out(uElem));
         }
         else {
-            accessName = this.generateAccessName();
-            createElement = new templates.CreateElement(accessName, type);
+            instanceName = this.generateAccessName();
+            createElement = new templates.CreateElement(instanceName, type);
             instr = this.domTemplates.createElementLocal.out(createElement);
+            accessName =this.domTemplates.accessNameLocal.out(new templates.AccessName(instanceName));
         }
 
         this.createInstructions.push(instr);
         this.setAttributes(accessName, attribs);
-
-        this.elementsStack.push(accessName);
+        this.stack(accessName);
         this.elementsLength++;
+    }
+
+    stack(accessName:string, canHaveChildren:boolean = true):void {
+        var currentParent:string;
+
+        if(this.elementsStack.length == 0) {
+            currentParent = this.rootAccessName;
+        }
+        else {
+            currentParent = this.elementsStack[this.elementsStack.length - 1];
+        }
+
+        var appendChild:templates.AppendChild = new templates.AppendChild(currentParent, accessName);
+        this.stackInstructions.push(this.domTemplates.appendChild.out(appendChild));
+
+        if(canHaveChildren)
+            this.elementsStack.push(accessName);
     }
 
     setAttributes(accessName:string, attribs:{[key:string]:string}):void {
@@ -91,9 +117,13 @@ export class DomInstructions {
             var value:string = attribs[key];
 
             var instr:string;
-            if(key == 'id' && this.domTemplates.setAttributeId) {
-                var setAttribId:templates.SetAttributeId = new templates.SetAttributeId(accessName, value);
-                instr = this.domTemplates.setAttributeId.out(setAttribId);
+            if(key == 'id') {
+                if(this.domTemplates.setAttributeId) {
+                    var setAttribId:templates.SetAttributeId = new templates.SetAttributeId(accessName, value);
+                    instr = this.domTemplates.setAttributeId.out(setAttribId);
+                }
+                else
+                    continue;
             }
             else {
                 var setAttribOther:templates.SetAttributeOther = new templates.SetAttributeOther(accessName, key, value);
@@ -110,21 +140,26 @@ export class DomInstructions {
     }
 
     addText(text:string):void {
-        var instr:string = this.domTemplates.createText.out(new templates.CreateText(this.generateAccessName(), text));
+        var accessName:string = this.generateAccessName();
+        var instr:string = this.domTemplates.createText.out(new templates.CreateText(accessName, text));
         this.createInstructions.push(instr);
+        this.stack(accessName, false);
+        this.elementsLength++;
     }
 }
 
 export class DomInstructionsFactory {
 
     domInstructionTemplates:templates.DomInstructionTemplates;
+    htmlRef:HtmlReference;
 
-    constructor(domInstructionTemplates:templates.DomInstructionTemplates) {
+    constructor(domInstructionTemplates:templates.DomInstructionTemplates, htmlRef:HtmlReference) {
         this.domInstructionTemplates = domInstructionTemplates;
+        this.htmlRef = htmlRef;
     }
 
     createDomInstructions():DomInstructions {
-        return new DomInstructions(this.domInstructionTemplates);
+        return new DomInstructions(this.domInstructionTemplates, this.htmlRef);
     }
 }
 
@@ -135,9 +170,10 @@ export class DomClassBuilder implements htmlparser.Handler {
     currentDomInstructions:DomInstructions;
     htmlParser:htmlparser.Parser;
 
-    constructor(classTemplate:templates.DomClassTemplate, domInstructionTemplates:templates.DomInstructionTemplates) {
+    constructor(classTemplate:templates.DomClassTemplate, domInstructionTemplates:templates.DomInstructionTemplates, htmlRef:HtmlReference) {
         this.domClassTemplate = classTemplate;
-        this.domInstructionsFactory = new DomInstructionsFactory(domInstructionTemplates);
+        this.domInstructionsFactory = new DomInstructionsFactory(domInstructionTemplates, htmlRef);
+        this.htmlParser = new htmlparser.Parser(this);
     }
 
     onopentag(name:string, attribs:{[type:string]: string}):void {
@@ -163,15 +199,17 @@ export class DomClassBuilder implements htmlparser.Handler {
         var domClass:templates.DomClass = new templates.DomClass();
         domClass.className = className;
         domClass.creation = this.currentDomInstructions.createInstructions.join("\n");
+        domClass.stacking = this.currentDomInstructions.stackInstructions.join("\n");
         domClass.elements = this.currentDomInstructions.uniqueElements.join("\n");
 
         callback(null, this.domClassTemplate.newDomClass.out(domClass));
     }
 }
 
-export function init(templateResource:string):DomClassBuilder {
+export function init(templateResource:string, htmlRefResource:string):DomClassBuilder {
     var resource:templates.Resource = new templates.Resource(templateResource);
     var domClassTempl:templates.DomClassTemplate = new templates.DomClassTemplate(resource);
     var domInstrTempl:templates.DomInstructionTemplates = new templates.DomInstructionTemplates(resource);
-    return new DomClassBuilder(domClassTempl, domInstrTempl);
+    var htmlRef:HtmlReference = new HtmlReference(htmlRefResource);
+    return new DomClassBuilder(domClassTempl, domInstrTempl, htmlRef);
 }

@@ -2,10 +2,11 @@
     "newDomClass": [
         "class className# {\n",
         "    root: DocumentFragment;",
-        "    elements#\n",
+        "elements#\n",
         "    constructor() {",
         "        this.root = document.createDocumentFragment();",
-        "        creation#",
+        "creation#",
+        "stacking#",
         "    }\n",
         "    appendTo(parent:HTMLElement): void {",
         "        parent.appendChild(this.root);",
@@ -13,11 +14,13 @@
         "}\n",
         "export = className#;"
     ],
-    "uniqueElement": "elementId#: elementType#;",
-    "createElementLocal": "var instanceName# = document.createElement('type#');",
-    "createElementMember": "this.instanceName# = document.createElement('type#');",
-    "createText": "var instanceName# = document.createTextNode('text#');",
-    "setAttributeOther": "accessName#.setAttribute('key#', 'value#');",
-    "setAttributeId": "accessName#.setAttribute('id', 'id#');",
-    "appendChild": "parent#.appendChild(child#);"
+    "uniqueElement": "    instanceName#: elementType#;",
+    "accessNameLocal": "instanceName#",
+    "accessNameMember": "this.instanceName#",
+    "createElementLocal": "        var instanceName# = document.createElement('type#');",
+    "createElementMember": "        this.instanceName# = document.createElement('type#');",
+    "createText": "        var instanceName# = document.createTextNode('text#');",
+    "setAttributeOther": "        accessName#.setAttribute('key#', 'value#');",
+    "setAttributeId": "        accessName#.setAttribute('id', 'id#');",
+    "appendChild": "        parent#.appendChild(child#);"
 }
