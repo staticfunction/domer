@@ -3,6 +3,18 @@
 /**
  * Created by jcabresos on 5/18/2014.
  */
+export class Line {
+    static SEPARATOR:string;
+
+    static getSeparator():string {
+        if(!Line.SEPARATOR) {
+            Line.SEPARATOR = process.platform == "win32" ? "\r\n" : "\n";
+        }
+
+        return Line.SEPARATOR;
+    }
+}
+
 export class AccessName {
     instanceName:string;
     constructor(instanceName:string) {
@@ -106,7 +118,7 @@ export class Resource {
             }
 
             if(Array.isArray(child)) {
-                return child.join("\n");
+                return child.join(Line.getSeparator());
             }
             else
                 return child;
@@ -178,7 +190,7 @@ export class Template<T> {
             if(params[key] == undefined || params[key] == null)
                 throw new Error("Required parameter \"" + key + "\" not found.");
 
-           var regex:RegExp = new RegExp(key + "#", "gm")
+           var regex:RegExp = new RegExp(key + "#", "gm");
             tmp = tmp.replace(regex, params[key]);
         }
 

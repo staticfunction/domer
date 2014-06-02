@@ -181,7 +181,7 @@ export class DomClassBuilder implements htmlparser.Handler {
     }
 
     ontext(text:string):void {
-        var matches:string[] = text.match(/[^\s\n]/gmi);
+        var matches:string[] = text.match(/[^\s\r\n]/gmi);
 
         if(matches && matches.length > 0)
             this.currentDomInstructions.addText(text);
@@ -198,9 +198,9 @@ export class DomClassBuilder implements htmlparser.Handler {
 
         var domClass:templates.DomClass = new templates.DomClass();
         domClass.className = className;
-        domClass.creation = this.currentDomInstructions.createInstructions.join("\n");
-        domClass.stacking = this.currentDomInstructions.stackInstructions.join("\n");
-        domClass.elements = this.currentDomInstructions.uniqueElements.join("\n");
+        domClass.creation = this.currentDomInstructions.createInstructions.join(templates.Line.getSeparator());
+        domClass.stacking = this.currentDomInstructions.stackInstructions.join(templates.Line.getSeparator());
+        domClass.elements = this.currentDomInstructions.uniqueElements.join(templates.Line.getSeparator());
 
         callback(null, this.domClassTemplate.newDomClass.out(domClass));
     }

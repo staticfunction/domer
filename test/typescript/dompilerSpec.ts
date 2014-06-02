@@ -3,19 +3,71 @@
  * Created by jcabresos on 5/20/2014.
  */
 import dompiler = require('../../src/typescript/dompiler');
+import templates = require('../../src/typescript/templates');
 import assert = require('assert');
 import fs = require('fs');
 
-var strip_ids_output:string = fs.readFileSync(__dirname + "/output/Chat.ts", "UTF-8");
-var strip_ids_input:string = fs.readFileSync(__dirname + "/input/Chat.html", "UTF-8");
-var strip_id_template:string = fs.readFileSync("src/typescript/resources/code_template_strip_id.json", "UTF-8");
-var htmlRefResource:string = fs.readFileSync("src/typescript/resources/htmlref.json", "UTF-8");
+var strip_ids_output:string[] = [
+    "class Chat {",
+    "",
+    "    root: DocumentFragment;",
+    "    subject: HTMLLabelElement;",
+    "    message: HTMLParagraphElement;",
+    "    dataHolder: any;",
+    "    displayName: HTMLLabelElement;",
+    "",
+    "    constructor() {",
+    "        this.root = document.createDocumentFragment();",
+    "        var n0 = document.createElement('div');",
+    "        this.subject = document.createElement('label');",
+    "        this.subject.setAttribute('class', 'header, important');",
+    "        this.message = document.createElement('p');",
+    "        this.dataHolder = document.createElement('data');",
+    "        var n4 = document.createElement('p');",
+    "        var n5 = document.createTextNode('This is some text with a ');",
+    "        var n6 = document.createElement('b');",
+    "        var n7 = document.createTextNode('bold word.');",
+    "        var n8 = document.createElement('div');",
+    "        this.displayName = document.createElement('label');",
+    "        this.root.appendChild(n0);",
+    "        n0.appendChild(this.subject);",
+    "        n0.appendChild(this.message);",
+    "        n0.appendChild(this.dataHolder);",
+    "        n0.appendChild(n4);",
+    "        n4.appendChild(n5);",
+    "        n4.appendChild(n6);",
+    "        n6.appendChild(n7);",
+    "        n0.appendChild(n8);",
+    "        n8.appendChild(this.displayName);",
+    "    }",
+    "",
+    "    appendTo(parent:HTMLElement): void {",
+    "        parent.appendChild(this.root);",
+    "    }",
+    "}",
+    "",
+    "export = Chat;"
+];
+
+var strip_ids_input:string[] = [
+    "<div>",
+    "    <label id=\"subject\" class=\"header, important\"></label>",
+    "    <p id=\"message\"></p>",
+    "    <data id=\"dataHolder\"></data>",
+    "    <p>This is some text with a <b>bold word.</b></p>",
+    "    <div>",
+    "       <label id=\"displayName\"></label>",
+    "    </div>",
+    "</div>"
+];
+var strip_id_template:string = fs.readFileSync("src/typescript/resources/code_template_strip_id.json", "utf8");
+var htmlRefResource:string = fs.readFileSync("src/typescript/resources/htmlref.json", "utf8");
 
 describe("DomClassBuilder building", () => {
     it("parses html and builds a class based on it's contents", (done:MochaDone) => {
         var classBuilder:dompiler.DomClassBuilder = dompiler.init(strip_id_template, htmlRefResource);
-        classBuilder.build("Chat", strip_ids_input, (error:Error, output:string) => {
-            assert.equal(output, strip_ids_output);
+        classBuilder.build("Chat", strip_ids_input.join(""), (error:Error, output:string) => {
+            assert.equal(output, strip_ids_output.join(templates.Line.getSeparator()));
             done();
         });
     })

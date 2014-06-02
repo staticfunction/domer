@@ -6,15 +6,15 @@ import templates = require('../../src/typescript/templates');
 import fs = require('fs');
 import assert = require('assert');
 
-var template_resolve_id:string = fs.readFileSync("src/typescript/resources/code_template_resolved_id.json", "UTF-8");
-var template_no_dom_class:string = fs.readFileSync(__dirname + "/resources/no_dom_class.json", "UTF-8");
-var template_no_unique_elem:string = fs.readFileSync(__dirname + "/resources/no_unique_element.json", "UTF-8");
-var template_no_create_elem_local:string = fs.readFileSync(__dirname + "/resources/no_create_elem_local.json", "UTF-8");
-var template_no_create_elem_member:string = fs.readFileSync(__dirname + "/resources/no_create_elem_member.json", "UTF-8");
-var template_no_create_text:string = fs.readFileSync(__dirname + "/resources/no_create_text.json", "UTF-8");
-var template_no_set_attrib_other:string = fs.readFileSync(__dirname + "/resources/no_set_attrib_other.json", "UTF-8");
-var template_no_set_attrib_id:string = fs.readFileSync(__dirname + "/resources/no_set_attrib_id.json", "UTF-8");
-var template_no_append_child:string = fs.readFileSync(__dirname + "/resources/no_append_child.json", "UTF-8");
+var template_resolve_id:string = fs.readFileSync("src/typescript/resources/code_template_resolved_id.json", "utf8");
+var template_no_dom_class:string = fs.readFileSync(__dirname + "/resources/no_dom_class.json", "utf8");
+var template_no_unique_elem:string = fs.readFileSync(__dirname + "/resources/no_unique_element.json", "utf8");
+var template_no_create_elem_local:string = fs.readFileSync(__dirname + "/resources/no_create_elem_local.json", "utf8");
+var template_no_create_elem_member:string = fs.readFileSync(__dirname + "/resources/no_create_elem_member.json", "utf8");
+var template_no_create_text:string = fs.readFileSync(__dirname + "/resources/no_create_text.json", "utf8");
+var template_no_set_attrib_other:string = fs.readFileSync(__dirname + "/resources/no_set_attrib_other.json", "utf8");
+var template_no_set_attrib_id:string = fs.readFileSync(__dirname + "/resources/no_set_attrib_id.json", "utf8");
+var template_no_append_child:string = fs.readFileSync(__dirname + "/resources/no_append_child.json", "utf8");
 
 var template_resolve_id_json:{[s:string]:any} = JSON.parse(template_resolve_id);
 
@@ -22,7 +22,7 @@ describe("Resource template extraction", () => {
    it("extracts templates", () => {
         var resource = new templates.Resource(template_resolve_id);
 
-        assert.equal(resource.newDomClass, template_resolve_id_json["newDomClass"].join("\n"));
+        assert.equal(resource.newDomClass, template_resolve_id_json["newDomClass"].join(templates.Line.getSeparator()));
         assert.equal(resource.uniqueElement, template_resolve_id_json["uniqueElement"]);
         assert.equal(resource.createElementLocal, template_resolve_id_json["createElementLocal"]);
         assert.equal(resource.createElementMember, template_resolve_id_json["createElementMember"]);
