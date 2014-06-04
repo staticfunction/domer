@@ -1,13 +1,12 @@
-/// <reference path="../../typings/tsd.d.ts"/>
-/// <reference path="resources/htmlparser2.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 
 /**
  * Created by jcabresos on 5/19/2014.
  */
 import templates = require('./templates');
-import fs = require('graceful-fs');
 import htmlparser = require('htmlparser2');
 
+//TODO: warn about using obsolete tags, suggest an alternative if any.
 export interface HtmlTagInfo {
     interface: string;
     obsolete: boolean;
@@ -158,58 +157,77 @@ export class DomInstructionsFactory {
         this.htmlRef = htmlRef;
     }
 
-    createDomInstructions():DomInstructions {
-        return new DomInstructions(this.domInstructionTemplates, this.htmlRef);
+    createDomInstructions(htmlText:string):DomInstructions {
+        var domInstructions:DomInstructions = new DomInstructions(this.domInstructionTemplates, this.htmlRef);
+
+        var htmlParser:htmlparser.Parser = new htmlparser.Parser({
+            onopentag: (name:string, attribs:{[type:string]: string}) => {
+                domInstructions.beginElement(name, attribs);
+            },
+            ontext: (text:string) => {
+                var matches:string[] = text.match(/[^\s\r\n]/gmi);
+
+                if(matches && matches.length > 0)
+                    domInstructions.addText(text);
+            },
+            onclosetag: (name:string) => {
+                domInstructions.endElement();
+            },
+            onerror: (error:Error) => {
+                throw error;
+            }
+        });
+
+        htmlParser.parseComplete(htmlText);
+
+        return domInstructions;
     }
 }
 
-export class DomClassBuilder implements htmlparser.Handler {
+export class DomClassBuilder {
+
+    className:string;
+    domInstructions:DomInstructions;
+    domClassTemplate:templates.DomClassTemplate;
+
+    constructor(className:string, domInstructions:DomInstructions, classTemplate:templates.DomClassTemplate) {
+        this.className = className;
+        this.domInstructions = domInstructions;
+        this.domClassTemplate = classTemplate;
+    }
+
+    build():string {
+        var domClass:templates.DomClass = new templates.DomClass();
+        domClass.className = this.className;
+        domClass.creation = this.domInstructions.createInstructions.join(templates.Line.getSeparator());
+        domClass.stacking = this.domInstructions.stackInstructions.join(templates.Line.getSeparator());
+        domClass.elements = this.domInstructions.uniqueElements.join(templates.Line.getSeparator());
+        return this.domClassTemplate.newDomClass.out(domClass);
+    }
+}
+
+export class DomClassBuilderFactory {
 
     domClassTemplate:templates.DomClassTemplate;
-    domInstructionsFactory:DomInstructionsFactory;
-    currentDomInstructions:DomInstructions;
-    htmlParser:htmlparser.Parser;
+    domInstructionFactory:DomInstructionsFactory;
 
     constructor(classTemplate:templates.DomClassTemplate, domInstructionTemplates:templates.DomInstructionTemplates, htmlRef:HtmlReference) {
         this.domClassTemplate = classTemplate;
-        this.domInstructionsFactory = new DomInstructionsFactory(domInstructionTemplates, htmlRef);
-        this.htmlParser = new htmlparser.Parser(this);
+        this.domInstructionFactory = new DomInstructionsFactory(domInstructionTemplates, htmlRef);
     }
 
-    onopentag(name:string, attribs:{[type:string]: string}):void {
-        this.currentDomInstructions.beginElement(name, attribs);
+    newBuilder(className:string, htmlText:string):DomClassBuilder {
+        var domInstructions:DomInstructions = this.domInstructionFactory.createDomInstructions(htmlText);
+        var domClassBuilder:DomClassBuilder = new DomClassBuilder(className, domInstructions, this.domClassTemplate);
+        return domClassBuilder;
     }
 
-    ontext(text:string):void {
-        var matches:string[] = text.match(/[^\s\r\n]/gmi);
-
-        if(matches && matches.length > 0)
-            this.currentDomInstructions.addText(text);
-    }
-
-    onclosetag(name:string):void {
-        this.currentDomInstructions.endElement();
-    }
-
-    build(className:string, htmlContent:string, callback:(err:Error, output:string) => void):void {
-        this.currentDomInstructions = this.domInstructionsFactory.createDomInstructions();
-
-        this.htmlParser.parseComplete(htmlContent);
-
-        var domClass:templates.DomClass = new templates.DomClass();
-        domClass.className = className;
-        domClass.creation = this.currentDomInstructions.createInstructions.join(templates.Line.getSeparator());
-        domClass.stacking = this.currentDomInstructions.stackInstructions.join(templates.Line.getSeparator());
-        domClass.elements = this.currentDomInstructions.uniqueElements.join(templates.Line.getSeparator());
-
-        callback(null, this.domClassTemplate.newDomClass.out(domClass));
-    }
 }
 
-export function init(templateResource:string, htmlRefResource:string):DomClassBuilder {
+export function init(templateResource:string, htmlRefResource:string):DomClassBuilderFactory {
     var resource:templates.Resource = new templates.Resource(templateResource);
     var domClassTempl:templates.DomClassTemplate = new templates.DomClassTemplate(resource);
     var domInstrTempl:templates.DomInstructionTemplates = new templates.DomInstructionTemplates(resource);
     var htmlRef:HtmlReference = new HtmlReference(htmlRefResource);
-    return new DomClassBuilder(domClassTempl, domInstrTempl, htmlRef);
+    return new DomClassBuilderFactory(domClassTempl, domInstrTempl, htmlRef);
 }

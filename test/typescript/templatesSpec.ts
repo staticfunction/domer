@@ -2,11 +2,11 @@
 /**
  * Created by jcabresos on 5/20/2014.
  */
-import templates = require('../../src/typescript/templates');
+import templates = require('../../src/templates');
 import fs = require('fs');
 import assert = require('assert');
 
-var template_resolve_id:string = fs.readFileSync("src/typescript/resources/code_template_resolved_id.json", "utf8");
+var template_resolve_id:string = fs.readFileSync("src/resources/code_template_resolved_id.json", "utf8");
 var template_no_dom_class:string = fs.readFileSync(__dirname + "/resources/no_dom_class.json", "utf8");
 var template_no_unique_elem:string = fs.readFileSync(__dirname + "/resources/no_unique_element.json", "utf8");
 var template_no_create_elem_local:string = fs.readFileSync(__dirname + "/resources/no_create_elem_local.json", "utf8");

@@ -1,4 +1,4 @@
-/// <reference path="../../typings/tsd.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 
 /**
  * Created by jcabresos on 5/18/2014.

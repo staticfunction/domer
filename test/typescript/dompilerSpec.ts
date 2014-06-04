@@ -2,8 +2,8 @@
 /**
  * Created by jcabresos on 5/20/2014.
  */
-import dompiler = require('../../src/typescript/dompiler');
-import templates = require('../../src/typescript/templates');
+import dompiler = require('../../src/dompiler');
+import templates = require('../../src/templates');
 import assert = require('assert');
 import fs = require('fs');
 
@@ -60,17 +60,17 @@ var strip_ids_input:string[] = [
     "    </div>",
     "</div>"
 ];
-var strip_id_template:string = fs.readFileSync("src/typescript/resources/code_template_strip_id.json", "utf8");
-var htmlRefResource:string = fs.readFileSync("src/typescript/resources/htmlref.json", "utf8");
+var strip_id_template:string = fs.readFileSync("src/resources/code_template_strip_id.json", "utf8");
+var htmlRefResource:string = fs.readFileSync("src/resources/htmlref.json", "utf8");
 
 describe("DomClassBuilder building", () => {
-    it("parses html and builds a class based on it's contents", (done:MochaDone) => {
-        var classBuilder:dompiler.DomClassBuilder = dompiler.init(strip_id_template, htmlRefResource);
-        classBuilder.build("Chat", strip_ids_input.join(""), (error:Error, output:string) => {
-            assert.equal(output, strip_ids_output.join(templates.Line.getSeparator()));
-            done();
-        });
-    })
+
+    var domClassBuilderFactory:dompiler.DomClassBuilderFactory = dompiler.init(strip_id_template, htmlRefResource);;
+
+    it("parses html and builds a class based on it's contents", () => {
+        var classBuilder:dompiler.DomClassBuilder = domClassBuilderFactory.newBuilder("Chat", strip_ids_input.join(""));
+        assert.equal(classBuilder.build(), strip_ids_output.join(templates.Line.getSeparator()));
+    });
 })
 
 
