@@ -13,7 +13,7 @@ declare module "htmlparser2" {
         oncommentend?:() => void;
         oncdatastart?:() => void;
         oncdataend?:() => void;
-        onerror?:(error:Error) => void;
+        onerror:(error:Error) => void;
         onreset?:() => void;
         onend?:() => void;
     }
