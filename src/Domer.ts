@@ -2,23 +2,93 @@
 /**
  * Created by jcabresos on 4/29/2014.
  */
-import DomerResource = require('./DomerResource');
 
-class Domer {
+import fs = require("fs");
+import dompiler = require("./dompiler");
+import path = require("path");
+import glob = require("glob");
 
-    source:DomerResource;
-    target:DomerResource;
+export enum Options {
+    STRIP_IDS,
+    RETAIN_IDS,
+    RESOLVE_IDS
+}
 
-    constructor(source:string, target:string) {
-        this.source = new DomerResource(source);
-        this.target = new DomerResource(target);
+export class Resource {
+
+    path:string;
+    stats:fs.Stats;
+
+    constructor(path:string) {
+        this.path = path;
+        this.stats = this.getFileOrDirectoryStats(path);
+    }
+
+    getFileOrDirectoryStats(path:string):fs.Stats {
+        if(!path)
+            return null;
+
+        try {
+            var pathStats:fs.Stats = fs.statSync(path);
+
+            if(pathStats.isFile() || pathStats.isDirectory())
+                return pathStats;
+            else
+                throw new Error("Path is not a file nor a directory.");
+        }
+        catch(e) {
+            throw new Error("No such file or directory: " + path);
+        }
+    }
+}
+
+export class Domer {
+
+    source:string;
+    target:string;
+    options:Options;
+
+
+
+    constructor(source:string, target:string, options:Options = Options.STRIP_IDS) {
+        this.source = source;
+        this.target = target;
+        this.options = options;
     }
 
     build(): void {
-        console.log("building from path: " + this.source.path);
-        setTimeout((target:DomerResource) => {
-            console.log("Finished and deployed to: " + target.path);
+
+        //this.load(this.source);
+
+        glob(this.source, null, (err:Error, files:string[]) => {
+
+            if(files) {
+               for(var i = 0; i < files.length; i++) {
+                   console.log("loaded file: " + files[i]);
+               }
+            }
+        });
+
+        setTimeout((target:Resource) => {
+            console.log("Finished and deployed to: " + target);
         }, 1000, this.target);
+    }
+
+    load(resource:Resource):void {
+        if(resource.stats.isDirectory()) {
+            console.log("getting list from dir: " + resource.path);
+
+            var files:string[] = fs.readdirSync(resource.path);
+            for (var i = 0; i < files.length; i++) {
+                this.load(new Resource(path.join(resource.path, files[i])));
+            }
+        }
+        else {
+            var content:string = fs.readFileSync(resource.path,"utf8");
+
+            console.log("loaded file from: " + resource.path);
+            console.log(content);
+        }
     }
 
     watch(): void {
@@ -27,8 +97,6 @@ class Domer {
             console.log('checking for changes...');
             console.log('no updates ' + new Date().getTime());
         }, 1000)
-        console.log("watchcing from path: " + this.source.path);
+        console.log("watchcing from path: " + this.source);
     }
 }
-
-export = Domer;

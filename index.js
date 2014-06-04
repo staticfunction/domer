@@ -3,7 +3,7 @@
  * Created by jcabresos on 4/29/2014.
  */
 
-var Domer = require('./src/Domer');
+var domer = require('./src/domer');
 var program = require('commander');
 
 program
@@ -27,9 +27,9 @@ console.log("Target is: " + target);
 
 try {
     if(program.watch)
-        new Domer(source, target).watch();
+        new domer.Domer(source, target).watch();
     else
-        new Domer(source, target).build();
+        new domer.Domer(source, target).build();
 }
 catch(e) {
     console.error(e);
