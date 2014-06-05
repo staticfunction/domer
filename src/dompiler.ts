@@ -5,6 +5,7 @@
  */
 import templates = require('./templates');
 import htmlparser = require('htmlparser2');
+import jsesc = require('js-string-escape');
 
 //TODO: warn about using obsolete tags, suggest an alternative if any.
 export interface HtmlTagInfo {
@@ -167,8 +168,9 @@ export class DomInstructionsFactory {
             ontext: (text:string) => {
                 var matches:string[] = text.match(/[^\s\r\n]/gmi);
 
-                if(matches && matches.length > 0)
-                    domInstructions.addText(text);
+                if(matches && matches.length > 0) {
+                    domInstructions.addText(jsesc(text));
+                }
             },
             onclosetag: (name:string) => {
                 domInstructions.endElement();
@@ -184,6 +186,16 @@ export class DomInstructionsFactory {
     }
 }
 
+export class DomClass {
+    fileName:string;
+    contents:string;
+
+    constructor(fileName:string, contents:string) {
+        this.fileName = fileName;
+        this.contents = contents;
+    }
+}
+
 export class DomClassBuilder {
 
     className:string;
@@ -196,13 +208,17 @@ export class DomClassBuilder {
         this.domClassTemplate = classTemplate;
     }
 
-    build():string {
+    build():DomClass {
         var domClass:templates.DomClass = new templates.DomClass();
         domClass.className = this.className;
         domClass.creation = this.domInstructions.createInstructions.join(templates.Line.getSeparator());
         domClass.stacking = this.domInstructions.stackInstructions.join(templates.Line.getSeparator());
         domClass.elements = this.domInstructions.uniqueElements.join(templates.Line.getSeparator());
-        return this.domClassTemplate.newDomClass.out(domClass);
+
+        var contents:string = this.domClassTemplate.newDomClass.out(domClass);
+        var fileName:string = this.domClassTemplate.fileName.out(new templates.FileName(this.className));
+
+        return new DomClass(fileName, contents);
     }
 }
 

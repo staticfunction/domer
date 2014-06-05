@@ -17,5 +17,6 @@
     "createElementMember": "this.instanceName# = document.createElement('type#');",
     "createText": "var instanceName# = document.createTextNode('text#');",
     "setAttributeId": "accessName#.setAttribute('id', 'id#_' + resolvedId);",
-    "appendChild": "parent#.appendChild(child#);"
+    "appendChild": "parent#.appendChild(child#);",
+    "fileName": "className#.ts"
 }

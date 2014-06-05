@@ -24,7 +24,7 @@ var strip_ids_output:string[] = [
     "        this.message = document.createElement('p');",
     "        this.dataHolder = document.createElement('data');",
     "        var n4 = document.createElement('p');",
-    "        var n5 = document.createTextNode('This is some text with a ');",
+    "        var n5 = document.createTextNode('This is some text with a\\r\\n');",
     "        var n6 = document.createElement('b');",
     "        var n7 = document.createTextNode('bold word.');",
     "        var n8 = document.createElement('div');",
@@ -54,7 +54,8 @@ var strip_ids_input:string[] = [
     "    <label id=\"subject\" class=\"header, important\"></label>",
     "    <p id=\"message\"></p>",
     "    <data id=\"dataHolder\"></data>",
-    "    <p>This is some text with a <b>bold word.</b></p>",
+    "    <p>This is some text with a",
+    "<b>bold word.</b></p>",
     "    <div>",
     "       <label id=\"displayName\"></label>",
     "    </div>",
@@ -68,8 +69,8 @@ describe("DomClassBuilder building", () => {
     var domClassBuilderFactory:dompiler.DomClassBuilderFactory = dompiler.init(strip_id_template, htmlRefResource);;
 
     it("parses html and builds a class based on it's contents", () => {
-        var classBuilder:dompiler.DomClassBuilder = domClassBuilderFactory.newBuilder("Chat", strip_ids_input.join(""));
-        assert.equal(classBuilder.build(), strip_ids_output.join(templates.Line.getSeparator()));
+        var classBuilder:dompiler.DomClassBuilder = domClassBuilderFactory.newBuilder("Chat", strip_ids_input.join(templates.Line.getSeparator()));
+        assert.equal(classBuilder.build().contents, strip_ids_output.join(templates.Line.getSeparator()));
     });
 })
 

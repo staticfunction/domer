@@ -17,5 +17,6 @@
     "createText": "var instanceName# = document.createTextNode('text#');",
     "setAttributeOther": "accessName#.setAttribute('key#', 'value#');",
     "setAttributeId": "accessName#.setAttribute('id', 'id#_' + resolvedId);",
-    "appendChild": "parent#.appendChild(child#);"
+    "appendChild": "parent#.appendChild(child#);",
+    "fileName": "className#.ts"
 }

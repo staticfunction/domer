@@ -6,3 +6,4 @@
 /// <reference path="libxmljs/libxmljs.d.ts" />
 /// <reference path="htmlparser2/htmlparser2.d.ts" />
 /// <reference path="glob/glob.d.ts" />
+/// <reference path="js-string-escape/js-string-escape.d.ts" />
