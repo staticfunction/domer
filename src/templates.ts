@@ -91,6 +91,14 @@ export class DomClass {
     stacking:string;
 }
 
+export class FileName {
+    className:string;
+
+    constructor(className:string) {
+        this.className = className;
+    }
+}
+
 export class Resource {
 
     newDomClass:string;
@@ -103,6 +111,7 @@ export class Resource {
     createText:string;
     setAttributeOther:string;
     setAttributeId:string;
+    fileName:string;
 
     constructor(templateResource:string) {
         var template:{[key:string]:any} = JSON.parse(templateResource);
@@ -134,6 +143,7 @@ export class Resource {
         this.createText = getTemplateChildText("createText", template, true);
         this.setAttributeOther = getTemplateChildText("setAttributeOther", template, true);
         this.setAttributeId = getTemplateChildText("setAttributeId", template);
+        this.fileName = getTemplateChildText("fileName", template, true);
     }
 }
 
@@ -164,9 +174,11 @@ export class DomInstructionTemplates {
 export class DomClassTemplate {
 
     newDomClass:Template<DomClass>;
+    fileName:Template<FileName>;
 
     constructor(resource:Resource) {
         this.newDomClass = new Template<DomClass>(resource.newDomClass);
+        this.fileName = new Template<FileName>(resource.fileName);
     }
 }
 

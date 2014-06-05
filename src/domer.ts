@@ -14,89 +14,89 @@ export enum Options {
     RESOLVE_IDS
 }
 
-export class Resource {
+class Resource {
+    static STRIP_IDS_TEMPLATE:string = path.join(__dirname, "resources", "code_template_strip_id.json");
+    static RETAIN_IDS__TEMPLATE:string = path.join(__dirname, "resources", "code_template_retain_id.json");
+    static RESOLVED_IDS_TEMPLATE:string = path.join(__dirname, "resources", "code_template_resolved_id.json");
+    static HTML_REFERENCE:string = path.join(__dirname, "resources", "htmlref.json");
+}
 
-    path:string;
-    stats:fs.Stats;
+class DomerUtil {
+    static getClassName(fileName:string):string {
+        var matches:string[] = fileName.match(/\w+/);
+        if(!matches || matches.length < 1)
+            throw new Error("Can't create class name from file.");
 
-    constructor(path:string) {
-        this.path = path;
-        this.stats = this.getFileOrDirectoryStats(path);
+        return matches[0];
     }
+}
 
-    getFileOrDirectoryStats(path:string):fs.Stats {
-        if(!path)
-            return null;
+export class DomerResource {
+    source:string;
+    target:string;
+    encoding:string;
 
-        try {
-            var pathStats:fs.Stats = fs.statSync(path);
-
-            if(pathStats.isFile() || pathStats.isDirectory())
-                return pathStats;
-            else
-                throw new Error("Path is not a file nor a directory.");
-        }
-        catch(e) {
-            throw new Error("No such file or directory: " + path);
-        }
+    constructor(source:string, target:string, encoding:string = "utf8") {
+        this.source = source;
+        this.target = target;
+        this.encoding = encoding;
     }
 }
 
 export class Domer {
 
-    source:string;
-    target:string;
+    domerResource:DomerResource;
     options:Options;
 
+    domClassBuilderFactory:dompiler.DomClassBuilderFactory;
 
+    constructor(domerResource:DomerResource, options:Options = Options.STRIP_IDS) {
+        this.domerResource = domerResource;
 
-    constructor(source:string, target:string, options:Options = Options.STRIP_IDS) {
-        this.source = source;
-        this.target = target;
-        this.options = options;
+        var templateResourcePath:string;
+
+        switch(options) {
+            case Options.RETAIN_IDS:
+                templateResourcePath = Resource.RETAIN_IDS__TEMPLATE;
+                break;
+
+            case Options.RESOLVE_IDS:
+                templateResourcePath = Resource.RESOLVED_IDS_TEMPLATE;
+                break;
+
+            default:
+                templateResourcePath = Resource.STRIP_IDS_TEMPLATE;
+                break;
+        }
+
+        var templateResource:string = fs.readFileSync(templateResourcePath, "utf8");
+        var htmlReference:string  = fs.readFileSync(Resource.HTML_REFERENCE, "utf8");
+
+        this.domClassBuilderFactory = dompiler.init(templateResource, htmlReference);
     }
 
-    build(): void {
+    build(watch:boolean = false): void {
 
-        //this.load(this.source);
-
-        glob(this.source, null, (err:Error, files:string[]) => {
+        glob(this.domerResource.source, null, (err:Error, files:string[]) => {
 
             if(files) {
-               for(var i = 0; i < files.length; i++) {
-                   console.log("loaded file: " + files[i]);
-               }
+                for(var i = 0; i < files.length; i++) {
+                    var filePath:string =  files[i];
+                    var className:string = DomerUtil.getClassName(path.basename(filePath));
+                    console.log("Building: ", className);
+
+                    var fileContents:string = fs.readFileSync(filePath, this.domerResource.encoding);
+                    var classBuilder:dompiler.DomClassBuilder = this.domClassBuilderFactory.newBuilder(className, fileContents);
+
+                    try {
+                        var domClass:dompiler.DomClass = classBuilder.build();
+                        fs.writeFileSync(path.join(path.dirname(filePath), domClass.fileName), domClass.contents);
+                    }
+                    catch(e) {
+                        console.error(e);
+                    }
+                }
             }
         });
-
-        setTimeout((target:Resource) => {
-            console.log("Finished and deployed to: " + target);
-        }, 1000, this.target);
-    }
-
-    load(resource:Resource):void {
-        if(resource.stats.isDirectory()) {
-            console.log("getting list from dir: " + resource.path);
-
-            var files:string[] = fs.readdirSync(resource.path);
-            for (var i = 0; i < files.length; i++) {
-                this.load(new Resource(path.join(resource.path, files[i])));
-            }
-        }
-        else {
-            var content:string = fs.readFileSync(resource.path,"utf8");
-
-            console.log("loaded file from: " + resource.path);
-            console.log(content);
-        }
-    }
-
-    watch(): void {
-
-        setInterval(() => {
-            console.log('checking for changes...');
-            console.log('no updates ' + new Date().getTime());
-        }, 1000)
-        console.log("watchcing from path: " + this.source);
     }
 }
