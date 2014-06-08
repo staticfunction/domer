@@ -75,7 +75,7 @@ export class Domer {
         this.domClassBuilderFactory = dompiler.init(templateResource, htmlReference);
     }
 
-    build(watch:boolean = false): void {
+    build(): void {
 
         glob(this.domerResource.source, null, (err:Error, files:string[]) => {
 
@@ -83,7 +83,8 @@ export class Domer {
                 for(var i = 0; i < files.length; i++) {
                     var filePath:string =  files[i];
                     var className:string = DomerUtil.getClassName(path.basename(filePath));
-                    console.log("Building: ", className);
+
+                    console.log("Building: ", className, "from", filePath);
 
                     var fileContents:string = fs.readFileSync(filePath, this.domerResource.encoding);
                     var classBuilder:dompiler.DomClassBuilder = this.domClassBuilderFactory.newBuilder(className, fileContents);

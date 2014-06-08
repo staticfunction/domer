@@ -11,11 +11,11 @@ program
 
 program
     .usage("[watch] [source] [target]")
-    .description('Document Object Modeler')
-    .option("-w, --watch", "Watch file or directory for changes.")
+    .description('Domer, HTML to TypeScript Utility')
     .option("-s, --source [source]", "Defines the file or directory to look for files")
-    .option("-t, --target [target]", "defines the file or directory to put the generated declarations")
-    .option("-e, --encoding [target]", "defines the encoding type of the source files. Default is utf8.")
+    .option("-t, --target [target]", "Defines the directory to put the dompiled files")
+    .option("-e, --encoding [target]", "Defines the encoding type of the source files. Default is utf8.", "utf8")
+    .option("-m, --mode [mode]", "Defines how dompiler treat DOM ids [strip, resolve, retain]", "strip")
     .parse(process.argv);
 
 console.log("Args:" + process.argv);
@@ -23,23 +23,33 @@ console.log("Args:" + process.argv);
 var source = program.source ? program.source : process.cwd();
 var target = program.target ? program.target : source;
 
-var domerResource;
-
-if(program.encoding) {
-    domerResource = new domer.DomerResource(source, target, program.encoding);
-}
-else {
-    domerResource = new domer.DomerResource(source, target);
-}
+var domerResource = new domer.DomerResource(source, target, program.encoding);
 
 console.log("Source is: " + source);
+console.log("Encoding is: " + program.encoding);
 console.log("Target is: " + target);
 
+var options;
+
+switch(program.mode) {
+    case "resolve":
+        options = domer.Options.RESOLVE_IDS;
+        console.log("setting mode to resolve ids");
+        break;
+
+    case "retain":
+        options = domer.Options.RETAIN_IDS;
+        console.log("setting mode to retain ids");
+        break;
+
+    default:
+        options = domer.Options.STRIP_IDS;
+        console.log("setting mode to strip ids");
+        break;
+}
+
 try {
-    if(program.watch)
-        new domer.Domer(domerResource).build(true);
-    else
-        new domer.Domer(domerResource).build();
+    new domer.Domer(domerResource, options).build();
 }
 catch(e) {
     console.error(e);
