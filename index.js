@@ -28,17 +28,17 @@ var options;
 
 switch(program.mode) {
     case "resolve":
-        options = domer.Options.RESOLVE_IDS;
+        options = domer.Mode.RESOLVE_IDS;
         console.log("setting mode to resolve ids");
         break;
 
     case "retain":
-        options = domer.Options.RETAIN_IDS;
+        options = domer.Mode.RETAIN_IDS;
         console.log("setting mode to retain ids");
         break;
 
     default:
-        options = domer.Options.STRIP_IDS;
+        options = domer.Mode.STRIP_IDS;
         console.log("setting mode to strip ids");
         break;
 }
