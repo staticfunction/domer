@@ -8,7 +8,7 @@ import dompiler = require("./dompiler");
 import path = require("path");
 import glob = require("glob");
 
-export enum Options {
+export enum Mode {
     STRIP_IDS,
     RETAIN_IDS,
     RESOLVE_IDS
@@ -33,12 +33,10 @@ class DomerUtil {
 
 export class DomerResource {
     source:string;
-    target:string;
     encoding:string;
 
-    constructor(source:string, target:string, encoding:string = "utf8") {
+    constructor(source:string, encoding:string = "utf8") {
         this.source = source;
-        this.target = target;
         this.encoding = encoding;
     }
 }
@@ -46,21 +44,22 @@ export class DomerResource {
 export class Domer {
 
     domerResource:DomerResource;
-    options:Options;
+    mode:Mode;
 
     domClassBuilderFactory:dompiler.DomClassBuilderFactory;
 
-    constructor(domerResource:DomerResource, options:Options = Options.STRIP_IDS) {
+    constructor(domerResource:DomerResource, mode:Mode = Mode.STRIP_IDS) {
         this.domerResource = domerResource;
+        this.mode = mode;
 
         var templateResourcePath:string;
 
-        switch(options) {
-            case Options.RETAIN_IDS:
+        switch(mode) {
+            case Mode.RETAIN_IDS:
                 templateResourcePath = Resource.RETAIN_IDS__TEMPLATE;
                 break;
 
-            case Options.RESOLVE_IDS:
+            case Mode.RESOLVE_IDS:
                 templateResourcePath = Resource.RESOLVED_IDS_TEMPLATE;
                 break;
 
@@ -76,9 +75,7 @@ export class Domer {
     }
 
     build(): void {
-
         glob(this.domerResource.source, null, (err:Error, files:string[]) => {
-
             if(files) {
                 for(var i = 0; i < files.length; i++) {
                     var filePath:string =  files[i];
@@ -91,7 +88,9 @@ export class Domer {
 
                     try {
                         var domClass:dompiler.DomClass = classBuilder.build();
-                        fs.writeFileSync(path.join(path.dirname(filePath), domClass.fileName), domClass.contents);
+                        var outputPath:string = path.join(path.dirname(filePath), domClass.fileName);
+                        fs.writeFileSync(outputPath, domClass.contents);
+                        console.log("Class generated successfully to: " + outputPath);
                     }
                     catch(e) {
                         console.error(e);

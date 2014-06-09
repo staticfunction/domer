@@ -1,6 +1,7 @@
 .idea
 .tscache
 codecoverage
+test_dummy
 node_modules
 src/**/*.js
 src/**/*.js.map

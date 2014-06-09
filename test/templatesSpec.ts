@@ -1,8 +1,8 @@
-/// <reference path="../../typings/tsd.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 /**
  * Created by jcabresos on 5/20/2014.
  */
-import templates = require('../../src/templates');
+import templates = require('../src/templates');
 import fs = require('fs');
 import assert = require('assert');
 

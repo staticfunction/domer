@@ -4,11 +4,19 @@
 module.exports = function(grunt) {
 
     var COVERAGE_DIR = 'codecoverage';
+    var TEST_DUMMY_DIR = 'test_dummy';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            main: [COVERAGE_DIR]
+            main: [COVERAGE_DIR, TEST_DUMMY_DIR]
+        },
+        copy: {
+            main: {
+                files: [
+                    {expand: true, cwd:"test/dummy", src:['**'], dest: TEST_DUMMY_DIR}
+                ]
+            }
         },
         tsd: {
             main: {
@@ -76,5 +84,5 @@ module.exports = function(grunt) {
     grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
 
     grunt.registerTask('build', ['clean', 'tsd','ts:build']);
-    grunt.registerTask('test', ['clean', 'ts:dev', 'coveralls']);
+    grunt.registerTask('test', ['clean', 'copy', 'ts:dev', 'coveralls']);
 }

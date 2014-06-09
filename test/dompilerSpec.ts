@@ -1,9 +1,9 @@
-/// <reference path="../../typings/tsd.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 /**
  * Created by jcabresos on 5/20/2014.
  */
-import dompiler = require('../../src/dompiler');
-import templates = require('../../src/templates');
+import dompiler = require('../src/dompiler');
+import templates = require('../src/templates');
 import assert = require('assert');
 import fs = require('fs');
 

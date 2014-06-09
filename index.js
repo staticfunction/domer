@@ -5,29 +5,24 @@
 
 var domer = require('./src/domer');
 var program = require('commander');
-
+var path = require('path');
 program
     .version('0.0.0');
 
 program
     .usage("[watch] [source] [target]")
     .description('Domer, HTML to TypeScript Utility')
-    .option("-s, --source [source]", "Defines the file or directory to look for files")
-    .option("-t, --target [target]", "Defines the directory to put the dompiled files")
+    .option("-s, --source [source]", "Defines the file pattern of html files. Default is *.html", path.join(process.cwd(), "*.html"))
     .option("-e, --encoding [target]", "Defines the encoding type of the source files. Default is utf8.", "utf8")
     .option("-m, --mode [mode]", "Defines how dompiler treat DOM ids [strip, resolve, retain]", "strip")
     .parse(process.argv);
 
-console.log("Args:" + process.argv);
+var source = program.source;
 
-var source = program.source ? program.source : process.cwd();
-var target = program.target ? program.target : source;
-
-var domerResource = new domer.DomerResource(source, target, program.encoding);
+var domerResource = new domer.DomerResource(source, program.encoding);
 
 console.log("Source is: " + source);
 console.log("Encoding is: " + program.encoding);
-console.log("Target is: " + target);
 
 var options;
 
