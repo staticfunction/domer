@@ -48,27 +48,42 @@ To Typescript:
 ```ts
 class Todo {
 
-    root: DocumentFragment;
+    rootNodes: HTMLElement[];
+    parent: HTMLElement;
     checkboxDisplay: HTMLInputElement;
     title: HTMLLabelElement;
     attachment: any;
 
     constructor() {
-        this.root = document.createDocumentFragment();
+        this.rootNodes = [];
         var n0 = document.createElement('div');
         this.checkboxDisplay = document.createElement('input');
         this.checkboxDisplay.setAttribute('type', 'checkbox');
         this.title = document.createElement('label');
         this.title.setAttribute('class', 'header, important');
         this.attachment = document.createElement('data');
-        this.root.appendChild(n0);
+        var n4 = document.createElement('button');
+        this.rootNodes.push(n0);
         n0.appendChild(this.checkboxDisplay);
         n0.appendChild(this.title);
         n0.appendChild(this.attachment);
+        n0.appendChild(n4);
     }
 
     appendTo(parent:HTMLElement): void {
-        parent.appendChild(this.root);
+        this.remove();
+        this.parent = parent;
+        this.rootNodes.forEach((node:HTMLElement) => {
+            this.parent.appendChild(node);
+        });
+    }
+    remove(): void {
+        if(!this.parent)
+            return;
+        this.rootNodes.forEach((node:HTMLElement) => {
+            this.parent.removeChild(node);
+        });
+        this.parent = null;
     }
 }
 
