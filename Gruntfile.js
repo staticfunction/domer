@@ -1,6 +1,8 @@
 /**
  * Created by jcabresos on 4/26/2014.
  */
+var path = require('path');
+
 module.exports = function(grunt) {
 
     var COVERAGE_DIR = 'codecoverage';
@@ -14,7 +16,9 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd:"test/dummy", src:['**'], dest: TEST_DUMMY_DIR}
+                    {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "strip")},
+                    {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "resolve")},
+                    {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "retain")}
                 ]
             }
         },
