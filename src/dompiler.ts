@@ -44,7 +44,7 @@ export class DomInstructions {
     static ELEMENT_PREFIX:string = "n";
 
     createInstructions:string[];
-    stackInstructions:string[];s
+    stackInstructions:string[];
     uniqueElements:string[];
 
     private domTemplates:templates.DomInstructionTemplates;
@@ -96,17 +96,19 @@ export class DomInstructions {
     }
 
     stack(accessName:string, canHaveChildren:boolean = true):void {
-        var currentParent:string;
+        var stackInstruction:string;
 
         if(this.elementsStack.length == 0) {
-            currentParent = this.rootAccessName;
+            var appendToRoot:templates.AppendToRoot = new templates.AppendToRoot(accessName);
+            stackInstruction = this.domTemplates.appendToRoot.out(appendToRoot);
         }
         else {
-            currentParent = this.elementsStack[this.elementsStack.length - 1];
+            var currentParent:string = this.elementsStack[this.elementsStack.length - 1];
+            var appendChild:templates.AppendChild = new templates.AppendChild(currentParent, accessName);
+            stackInstruction = this.domTemplates.appendChild.out(appendChild);
         }
 
-        var appendChild:templates.AppendChild = new templates.AppendChild(currentParent, accessName);
-        this.stackInstructions.push(this.domTemplates.appendChild.out(appendChild));
+        this.stackInstructions.push(stackInstruction);
 
         if(canHaveChildren)
             this.elementsStack.push(accessName);

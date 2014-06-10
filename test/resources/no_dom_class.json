@@ -6,5 +6,6 @@
     "setAttributeOther": "accessName#.setAttribute('key#', 'value#');",
     "setAttributeId": "accessName#.setAttribute('id', 'id#_' + resolvedId);",
     "appendChild": "parent#.appendChild(child#);",
+    "appendToRoot": "        this.rootNodes.push(accessName#);",
     "fileName": "className#.ts"
 }

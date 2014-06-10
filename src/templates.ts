@@ -64,6 +64,14 @@ export class AppendChild {
     }
 }
 
+export class AppendToRoot {
+    accessName:string;
+
+    constructor(accessName:string) {
+        this.accessName = accessName;
+    }
+}
+
 export class CreateElement {
     instanceName:string;
     type:string;
@@ -103,6 +111,7 @@ export class Resource {
 
     newDomClass:string;
     appendChild:string;
+    appendToRoot:string;
     accessNameLocal:string;
     accessNameMember:string;
     createElementLocal:string;
@@ -135,6 +144,7 @@ export class Resource {
 
         this.newDomClass = getTemplateChildText("newDomClass", template, true);
         this.appendChild =  getTemplateChildText("appendChild", template, true);
+        this.appendToRoot =  getTemplateChildText("appendToRoot", template, true);
         this.accessNameLocal =  getTemplateChildText("accessNameLocal", template, true);
         this.accessNameMember =  getTemplateChildText("accessNameMember", template, true);
         this.createElementLocal = getTemplateChildText("createElementLocal", template, true);
@@ -149,6 +159,7 @@ export class Resource {
 
 export class DomInstructionTemplates {
     appendChild:Template<AppendChild>;
+    appendToRoot:Template<AppendToRoot>;
     accessNameLocal:Template<AccessName>;
     accessNameMember:Template<AccessName>;
     createElementLocal:Template<CreateElement>;
@@ -160,6 +171,7 @@ export class DomInstructionTemplates {
 
     constructor(resource:Resource) {
         this.appendChild = new Template<AppendChild>(resource.appendChild);
+        this.appendToRoot = new Template<AppendToRoot>(resource.appendToRoot);
         this.accessNameLocal = new Template<AccessName>(resource.accessNameLocal);
         this.accessNameMember = new Template<AccessName>(resource.accessNameMember);
         this.createElementLocal = new Template<CreateElement>(resource.createElementLocal);

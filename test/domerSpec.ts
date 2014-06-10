@@ -10,28 +10,17 @@ import fs = require('fs');
 import path = require('path');
 import glob = require('glob');
 
-var source:string = "test_dummy/**/*.html";
-var generated:string = "test_dummy/**/*.ts";
+var source:string = "test_dummy";
 
 describe("Domer Main", () => {
 
-    beforeEach(() => {
-        glob(generated, null, (err:Error, files:string[]) => {
-            if(!files)
-                return;
-
-            while(files.length > 0)
-                fs.unlinkSync(files.pop());
-        })
-    })
-
     it("builds ts file equivalents of each html file with mode \"strip\"", () => {
-        var domerInstance = new domer.Domer(new domer.DomerResource(source));
+        var domerInstance = new domer.Domer(new domer.DomerResource(path.join(source,"strip","**","*.html")));
         domerInstance.build();
 
         assert.equal(domerInstance.mode, domer.Mode.STRIP_IDS);
 
-        glob(source, null, (err:Error, files:string[]) => {
+        glob(domerInstance.domerResource.source, null, (err:Error, files:string[]) => {
 
             if(err)
                 throw err;
@@ -45,12 +34,12 @@ describe("Domer Main", () => {
    });
 
     it("builds ts file equivalents of each html file with mode \"resolve\"", () => {
-        var domerInstance = new domer.Domer(new domer.DomerResource(source), domer.Mode.RESOLVE_IDS);
+        var domerInstance = new domer.Domer(new domer.DomerResource(path.join(source,"resolve","**","*.html")), domer.Mode.RESOLVE_IDS);
         domerInstance.build();
 
         assert.equal(domerInstance.mode, domer.Mode.RESOLVE_IDS);
 
-        glob(source, null, (err:Error, files:string[]) => {
+        glob(domerInstance.domerResource.source, null, (err:Error, files:string[]) => {
 
             if(err)
                 throw err;
@@ -64,12 +53,12 @@ describe("Domer Main", () => {
    });
 
     it("builds ts file equivalents of each html file with mode \"retain\"", () => {
-        var domerInstance = new domer.Domer(new domer.DomerResource(source), domer.Mode.RETAIN_IDS);
+        var domerInstance = new domer.Domer(new domer.DomerResource(path.join(source,"retain","**","*.html")), domer.Mode.RETAIN_IDS);
         domerInstance.build();
 
         assert.equal(domerInstance.mode, domer.Mode.RETAIN_IDS);
 
-        glob(source, null, (err:Error, files:string[]) => {
+        glob(domerInstance.domerResource.source, null, (err:Error, files:string[]) => {
 
             if(err)
                 throw err;
