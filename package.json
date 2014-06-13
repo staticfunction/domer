@@ -1,36 +1,33 @@
 {
   "name": "domer",
-  "version": "0.0.1",
+  "version": "0.0.12",
   "description": "HTML to TypeScript Class generator",
-  "main": "index.js",
-  "scripts": {
-    "test": "grunt test",
-    "install": "grunt build"
-  },
   "keywords": [
     "Typescript"
   ],
   "author": "James Roland Cabresos <https://github.com/staticfunction>",
   "license": "MIT",
   "devDependencies": {
-    "commander": "~2.2.0",
     "grunt": "~0.4.4",
+    "grunt-cli": "~0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-copy": "~0.5.0",
-    "mocha": "~1.18.2",
     "grunt-mocha-istanbul": "~1.4.1",
-    "grunt-tsd": "~0.1.0",
+    "grunt-release": "^0.7.0",
     "grunt-ts": "~1.11.0",
-    "grunt-cli": "~0.1.13",
-    "js-string-escape": "~1.0.0"
+    "grunt-tsd": "~0.1.0",
+    "mocha": "~1.18.2"
   },
   "preferGlobal": "true",
+  "main": "domercli.js",
   "bin": {
-    "domer": "./index.js"
+    "domer": "domercli.js"
   },
   "dependencies": {
     "graceful-fs": "~2.0.3",
     "htmlparser2": "~3.7.1",
-    "glob": "~4.0.2"
+    "js-string-escape": "~1.0.0",
+    "glob": "~4.0.2",
+    "commander": "~2.2.0"
   }
 }
