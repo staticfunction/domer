@@ -4,3 +4,6 @@ node_js:
   - "0.10"
 
 install: npm install
+before_script:
+  - grunt build
+  - grunt test

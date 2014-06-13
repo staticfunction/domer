@@ -2,6 +2,7 @@
 .tscache
 codecoverage
 test_dummy
+bin-release
 node_modules
 src/**/*.js
 src/**/*.js.map

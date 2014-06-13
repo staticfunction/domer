@@ -7,18 +7,25 @@ module.exports = function(grunt) {
 
     var COVERAGE_DIR = 'codecoverage';
     var TEST_DUMMY_DIR = 'test_dummy';
+    var RELEASE_DIR = 'bin-release';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            main: [COVERAGE_DIR, TEST_DUMMY_DIR]
+            main: [COVERAGE_DIR, TEST_DUMMY_DIR],
+            release: [RELEASE_DIR]
         },
         copy: {
-            main: {
+            test: {
                 files: [
                     {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "strip")},
                     {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "resolve")},
                     {expand: true, cwd:"test/dummy", src:['**'], dest: path.join(TEST_DUMMY_DIR, "retain")}
+                ]
+            },
+            release: {
+                files: [
+                    {expand: true, src:['src/**/*.js', 'src/**/*.json', 'domercli.js', 'package.json', 'LICENSE', 'README.md'], dest: RELEASE_DIR}
                 ]
             }
         },
@@ -87,6 +94,7 @@ module.exports = function(grunt) {
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
     grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
 
-    grunt.registerTask('build', ['clean', 'tsd','ts:build']);
-    grunt.registerTask('test', ['clean', 'copy', 'ts:dev', 'coveralls']);
+    grunt.registerTask('build', ['tsd','ts:build']);
+    grunt.registerTask('release', ['clean:release', 'copy:release']);
+    grunt.registerTask('test', ['clean:test', 'copy:test', 'ts:dev', 'coveralls']);
 }
