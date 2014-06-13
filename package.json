@@ -4,7 +4,8 @@
   "description": "HTML to TypeScript Class generator",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "install": "grunt build"
   },
   "keywords": [
     "Typescript"
