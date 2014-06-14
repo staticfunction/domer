@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-/**
- * Created by jcabresos on 4/29/2014.
- */
 
 var domer = require('./src/domer');
 var program = require('commander');
