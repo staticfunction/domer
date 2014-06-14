@@ -68,9 +68,31 @@ export class DomInstructions {
         return  DomInstructions.ELEMENT_PREFIX + this.elementsLength.toString();
     }
 
+    camelCaseAccessName(value:string):string {
+        if(!value)
+            return null;
+
+        var words:string[] = value.match(/[a-z0-9]+/gmi);
+        var output:string[] = [];
+        var firstTaken:boolean;
+
+        words.forEach((word:string) => {
+            if(!firstTaken) {
+                output.push(word);
+                firstTaken = true;
+                return;
+            }
+
+            output.push(word.charAt(0).toUpperCase());
+            output.push(word.substr(1));
+        })
+
+        return output.join("");
+    }
+
     beginElement(type:string, attribs:{[key:string]:string}):void {
         var createElement:templates.CreateElement;
-        var instanceName:string = attribs['id'];
+        var instanceName:string = this.camelCaseAccessName(attribs['id']);
         var accessName:string;
         var instr:string;
 
