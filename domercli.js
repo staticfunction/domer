@@ -4,7 +4,7 @@ var domer = require('./src/domer');
 var program = require('commander');
 var path = require('path');
 program
-    .version('0.0.12');
+    .version('0.0.13');
 
 program
     .usage("[watch] [source] [target]")
@@ -46,4 +46,3 @@ try {
 catch(e) {
     console.error(e);
 }
-
