@@ -1,6 +1,6 @@
 {
   "name": "domer",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "HTML to TypeScript Class generator",
   "keywords": [
     "Typescript"
