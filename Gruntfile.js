@@ -96,5 +96,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', ['tsd','ts:build']);
     grunt.registerTask('release', ['clean:release', 'copy:release']);
-    grunt.registerTask('test', ['clean:test', 'copy:test', 'ts:dev', 'coveralls']);
+    grunt.registerTask('test', ['clean', 'copy:test', 'ts:dev', 'coveralls']);
 }
