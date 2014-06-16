@@ -14,7 +14,7 @@ npm install domer -g
 1. Go to the directory where you put your HTML files.
 2. Run domer
 ```shell
-domer
+domer -s **/*.html
 ```
 3. You'll see generated Typescript files in the same directory with the same name as the HTML file!
 

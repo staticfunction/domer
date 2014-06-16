@@ -4,10 +4,10 @@ var domer = require('./src/domer');
 var program = require('commander');
 var path = require('path');
 program
-    .version('0.0.13');
+    .version('0.0.14');
 
 program
-    .usage("[watch] [source] [target]")
+    .usage("domer -s [source] -e [encoding] -m [mode]")
     .description('Domer, HTML to TypeScript Utility')
     .option("-s, --source [source]", "Defines the file pattern of html files. Default is *.html", path.join(process.cwd(), "*.html"))
     .option("-e, --encoding [target]", "Defines the encoding type of the source files. Default is utf8.", "utf8")
