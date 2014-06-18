@@ -53,34 +53,23 @@ module.exports = function(grunt) {
                 sourceMap: true,               // generate a source map for every output js file. [true (default) | false]
                 declaration: false            // generate a declaration .d.ts file for every output js file. [true | false (default)]
             },
-            dev: {
-                src: ["src/**/*.ts","test/**/*.ts"]
-            },
-            // a particular target
             build: {
-                src: ["src/**/*.ts"],          // The source typescript files, http://gruntjs.com/configuring-tasks#files
-                // use to override the grunt-ts project options above for this target
-                options: {
-                    module: 'commonjs',
-                    sourceMap: false
-                }
+                src: ["src/**/*.ts","test/**/*.ts"]
             }
         },
         mocha_istanbul: {
+            src: 'test',
             options: {
-                recursive: true //include subdirectories
-            },
-            coverage: {
-                src: 'test' // the folder, not the files,
-            },
-            coveralls: {
-                src: 'test', // the folder, not the files
-                options: {
-                    coverage:true,
-                    root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
-                    reportFormats: ['cobertura','lcovonly','html'],
-                    coverageFolder: COVERAGE_DIR
-                }
+                recursive: true, //include subdirectories
+                coverage:true,
+                root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
+                coverageFolder: COVERAGE_DIR,
+                reportFormats: ['html','lcovonly']
+            }
+        },
+        coveralls: {
+            options: {
+                src: path.join(COVERAGE_DIR, 'lcov.info')
             }
         }
     });
@@ -90,11 +79,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-istanbul');
     grunt.loadNpmTasks('grunt-tsd');
     grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-coveralls');
 
-    grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
-    grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
-
-    grunt.registerTask('build', ['tsd','ts:build']);
+    grunt.registerTask('configure', ['tsd'])
+    grunt.registerTask('build', ['ts:build']);
     grunt.registerTask('release', ['clean:release', 'copy:release']);
-    grunt.registerTask('test', ['clean', 'copy:test', 'ts:dev', 'coveralls']);
+    grunt.registerTask('test', ['clean', 'copy:test','mocha_istanbul']);
 }
