@@ -5,7 +5,7 @@
 import dompiler = require('../src/dompiler');
 import templates = require('../src/templates');
 import assert = require('assert');
-import fs = require('fs');
+import fs = require('graceful-fs');
 
 var strip_ids_output:string[] = [
     "class Chat {",

@@ -3,7 +3,7 @@
  * Created by jcabresos on 5/20/2014.
  */
 import templates = require('../src/templates');
-import fs = require('fs');
+import fs = require('graceful-fs');
 import assert = require('assert');
 
 var template_resolve_id:string = fs.readFileSync("src/resources/code_template_resolved_id.json", "utf8");

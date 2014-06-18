@@ -6,7 +6,7 @@
 
 import domer = require('../src/domer');
 import assert = require('assert');
-import fs = require('fs');
+import fs = require('graceful-fs');
 import path = require('path');
 import glob = require('glob');
 
