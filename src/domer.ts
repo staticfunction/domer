@@ -3,7 +3,7 @@
  * Created by jcabresos on 4/29/2014.
  */
 
-import fs = require("fs");
+import fs = require("graceful-fs");
 import dompiler = require("./dompiler");
 import path = require("path");
 import glob = require("glob");
@@ -16,7 +16,7 @@ export enum Mode {
 
 class Resource {
     static STRIP_IDS_TEMPLATE:string = path.join(__dirname, "resources", "code_template_strip_id.json");
-    static RETAIN_IDS__TEMPLATE:string = path.join(__dirname, "resources", "code_template_retain_id.json");
+    static RETAIN_IDS_TEMPLATE:string = path.join(__dirname, "resources", "code_template_retain_id.json");
     static RESOLVED_IDS_TEMPLATE:string = path.join(__dirname, "resources", "code_template_resolved_id.json");
     static HTML_REFERENCE:string = path.join(__dirname, "resources", "htmlref.json");
 }
@@ -56,7 +56,7 @@ export class Domer {
 
         switch(mode) {
             case Mode.RETAIN_IDS:
-                templateResourcePath = Resource.RETAIN_IDS__TEMPLATE;
+                templateResourcePath = Resource.RETAIN_IDS_TEMPLATE;
                 break;
 
             case Mode.RESOLVE_IDS:
