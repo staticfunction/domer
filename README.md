@@ -4,6 +4,7 @@
 A tool that helps you create TypeScript modules from plain HTML!
 
 [![Build Status](https://travis-ci.org/staticfunction/domer.svg?branch=master)](https://travis-ci.org/staticfunction/domer)
+[![Coverage Status](https://img.shields.io/coveralls/staticfunction/domer.svg)](https://coveralls.io/r/staticfunction/domer)
 
 ##Install
 ```shell
