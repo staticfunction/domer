@@ -4,7 +4,7 @@ var domer = require('./src/domer');
 var program = require('commander');
 var path = require('path');
 program
-    .version('0.1.0');
+    .version('0.1.3');
 
 program
     .usage("domer -s [source] -e [encoding] -m [mode]")
