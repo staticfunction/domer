@@ -2,6 +2,7 @@
  * Created by jcabresos on 4/26/2014.
  */
 var path = require('path');
+var coveralls = require('coveralls');
 
 module.exports = function(grunt) {
 
@@ -58,20 +59,35 @@ module.exports = function(grunt) {
             }
         },
         mocha_istanbul: {
-            src: 'test',
-            options: {
-                recursive: true, //include subdirectories
-                coverage:true,
-                root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
-                coverageFolder: COVERAGE_DIR,
-                reportFormats: ['html','lcovonly']
-            }
-        },
-        coveralls: {
-            options: {
-                src: path.join(COVERAGE_DIR, 'lcov.info')
+            local: {
+                src: 'test',
+                options: {
+                    recursive: true, //include subdirectories
+                    coverage:false,
+                    root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
+                    coverageFolder: COVERAGE_DIR,
+                    reportFormats: ['html']
+                }
+            },
+            coveralls: {
+                src: 'test',
+                options: {
+                    recursive: true, //include subdirectories
+                    coverage:true,
+                    root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
+                    coverageFolder: COVERAGE_DIR,
+                    reportFormats: ['cobertura','lcovonly']
+                }
             }
         }
+    });
+
+    grunt.event.on('coverage', function(lcov, done) {
+        coveralls.handleInput(lcov, function(err) {
+            if(err) {
+                return done(err);
+            }
+        });
     });
 
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -79,10 +95,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-istanbul');
     grunt.loadNpmTasks('grunt-tsd');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-coveralls');
 
     grunt.registerTask('configure', ['tsd'])
     grunt.registerTask('build', ['ts:build']);
     grunt.registerTask('release', ['clean:release', 'copy:release']);
-    grunt.registerTask('test', ['clean', 'copy:test','mocha_istanbul']);
+    grunt.registerTask('test-local', ['clean', 'copy:test','mocha_istanbul:local']);
+    grunt.registerTask('test-cover', ['clean', 'copy:test','mocha_istanbul:coveralls']);
+
 }

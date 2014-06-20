@@ -7,5 +7,4 @@ install: npm install
 before_script:
   - grunt configure
   - grunt build
-  - grunt test
-  - grunt coveralls
+  - grunt test-cover

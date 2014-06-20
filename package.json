@@ -8,11 +8,11 @@
   "author": "James Roland Cabresos <https://github.com/staticfunction>",
   "license": "MIT",
   "devDependencies": {
+    "coveralls": "^2.10.0",
     "grunt": "~0.4.4",
     "grunt-cli": "~0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-coveralls": "^0.3.0",
     "grunt-mocha-istanbul": "~1.4.1",
     "grunt-release": "^0.7.0",
     "grunt-ts": "~1.11.0",
