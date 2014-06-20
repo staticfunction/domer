@@ -2,7 +2,6 @@
  * Created by jcabresos on 4/26/2014.
  */
 var path = require('path');
-var coveralls = require('coveralls');
 
 module.exports = function(grunt) {
 
@@ -59,16 +58,6 @@ module.exports = function(grunt) {
             }
         },
         mocha_istanbul: {
-            local: {
-                src: 'test',
-                options: {
-                    recursive: true, //include subdirectories
-                    coverage:false,
-                    root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
-                    coverageFolder: COVERAGE_DIR,
-                    reportFormats: ['html']
-                }
-            },
             coveralls: {
                 src: 'test',
                 options: {
@@ -76,18 +65,10 @@ module.exports = function(grunt) {
                     coverage:true,
                     root: 'src', // define where the cover task should consider the root of libraries that are covered by tests
                     coverageFolder: COVERAGE_DIR,
-                    reportFormats: ['cobertura','lcovonly']
+                    reportFormats: ['html','cobertura','lcovonly']
                 }
             }
         }
-    });
-
-    grunt.event.on('coverage', function(lcov, done) {
-        coveralls.handleInput(lcov, function(err) {
-            if(err) {
-                return done(err);
-            }
-        });
     });
 
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -99,7 +80,6 @@ module.exports = function(grunt) {
     grunt.registerTask('configure', ['tsd'])
     grunt.registerTask('build', ['ts:build']);
     grunt.registerTask('release', ['clean:release', 'copy:release']);
-    grunt.registerTask('test-local', ['clean', 'copy:test','mocha_istanbul:local']);
-    grunt.registerTask('test-cover', ['clean', 'copy:test','mocha_istanbul:coveralls']);
+    grunt.registerTask('test', ['clean', 'copy:test','mocha_istanbul']);
 
 }

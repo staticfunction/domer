@@ -7,4 +7,6 @@ install: npm install
 before_script:
   - grunt configure
   - grunt build
-  - grunt test-cover
+  - grunt test
+
+after_script: cat ./codecoverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./codecoverage
