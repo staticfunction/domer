@@ -1,5 +1,6 @@
 #DOMER
 ========
+See how Domer output code performs [here](http://jsperf.com/angular-vs-knockout-vs-ember/736)
 
 A tool that helps you create TypeScript modules from plain HTML!
 
